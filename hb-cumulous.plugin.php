@@ -168,16 +168,21 @@ class HbCumulus extends Plugin {
 	  **/
 	public function action_admin_footer( $theme ) {
         if (Controller::get_var('configure') == $this->plugin_id) {
-			echo <<< HB_CUMULUS_CSS
-                <style type="text/css">
-                   form#hbcumulus .formcontrol { line-height: 24px; height: 18px; }
-                   form#hbcumulus span.pct25 select { width: 85%; }
-                   form#hbcumulus span.pct25 { text-align: right; }
-                   form#hbcumulus span.pct5 input { margin-left: 25px; }
-                   form#hbcumulus p.error { float: left; color: #A00; }
-                </style>
-HB_CUMULUS_CSS;
-		}
+            $output = '<style type="text/css">';
+            if (Version::HABARI_VERSION == '0.5.2') {
+                $output .= 'form#hbcumulus .formcontrol { line-height: 24px; height: 30px; }';
+                $output .= 'form#hbcumulus #save input { float:none; }';
+
+            } else {
+                $output .= 'form#hbcumulus .formcontrol { line-height: 24px; height: 18px; }';
+            }
+        $output .= 'form#hbcumulus span.pct25 select { width: 85%; }';
+        $output .= 'form#hbcumulus span.pct25 { text-align: right; }';
+        $output .= 'form#hbcumulus span.pct5 input { margin-left: 25px; }';
+        $output .= 'form#hbcumulus p.error { float: left; color: #A00; }';
+        $output .= '</style>';
+        echo $output;
+        }
     }
 
     /**
