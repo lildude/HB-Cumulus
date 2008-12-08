@@ -1,9 +1,7 @@
 <?php
 /**
- * This is a direct port of WP-Cumulus available from http://www.roytanck.com/2008/03/15/wp-cumulus-released
- *
- * TODO: Create my own FormControls - cos the defaults are quite pants (one day).
- * TODO: Use some of the tagcloud plugin code to get list of tags and usage etc for cloud
+ * This is a port of WP-Cumulus by Roy Tanck (http://www.roytanck.com/2008/03/15/wp-cumulus-released)
+ * TODO: but I've updated the SFWObject code to 2.1 so multiple instances can be supported.
  */
 
 class HbCumulus extends Plugin {
@@ -187,7 +185,6 @@ class HbCumulus extends Plugin {
 
     /**
      * The function that generates the code for the cloud
-     * @todo: Detect if the tag cloud plugin is installed and if it is, replace the [HB-CUMULUS] tag with the non-flash tag cloud
      */
     private function get_flashcode($config = FALSE) {
         $this->options = unserialize(Options::get('hb-cumulus__options'));
@@ -239,7 +236,6 @@ class HbCumulus extends Plugin {
 
     /**
      * Construst SQL from list of tags
-     * @todo: Add 'hide tags' option to config page.
      */
 
     private function get_hide_tag_list()
