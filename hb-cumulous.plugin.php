@@ -214,7 +214,7 @@ class HbCumulus extends Plugin {
         $flashtag .= '<script type="text/javascript" src="'.$path.'/swfobject.js"></script>';
         $flashtag .= '<div id="hbcumulus"><p style="display:none;">';
         $flashtag .= urldecode($tagcloud);
-        $flashtag .= '<p>HB Cumulus Flash tag cloud by <a href="http://www.colinseymour.co.uk">Colin Seymour</a> requires Flash Player 9 or better and can only be displayed once per page.</p></div>';
+        $flashtag .= '</p><p>HB Cumulus Flash tag cloud by <a href="http://www.colinseymour.co.uk">Colin Seymour</a> requires Flash Player 9 or better and can only be displayed once per page.</p></div>';
         $flashtag .= '<script type="text/javascript">';
         $flashtag .= 'var rnumber = Math.floor(Math.random()*9999999);'; // force loading of movie to fix IE weirdness
         $flashtag .= 'var so = new SWFObject("'.$movie.'?r="+rnumber, "tagcloudflash", "'.$this->options['width'].'", "'.$this->options['height'].'", "9", "#'.$this->options['bgcolor'].'");';
