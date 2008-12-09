@@ -1,35 +1,56 @@
 <?php
 /**
- * This is a port of WP-Cumulus by Roy Tanck (http://www.roytanck.com/2008/03/15/wp-cumulus-released)
- * TODO: but I've updated the SFWObject code to 2.1 so multiple instances can be supported.
+ * HB-Cumulus is a Flash-based tag cloud for Habari.
+ * HB-Cumulus is a port of the very popular Wordpress version (WP-Cumulus) written by Roy Tanck.
+ * 
+ * @package HbCumulus
+ * @version 0.1
+ * @author Colin Seymour - http://www.colinseymour.co.uk
+ * @license http://www.apache.org/licenses/LICENSE-2.0 Apache License 2.0 (unless otherwise stated)
+ * @link http://www.lildude.co.uk/projects/hb-cumulus
  */
 
 class HbCumulus extends Plugin {
 
     private $options = array();
+
+    /**
+     * Plugin information
+     *
+     * @access public
+     * @return void
+     */
     public function info() {
         return array (
-            'name' => 'Hb-Cumulus',
+            'name' => 'HB-Cumulus',
             'url' => 'http://www.lildude.co.uk/projects/hb-cumulus',
             'author' => 'Colin Seymour',
             'authorurl' => 'http://www.colinseymour.co.uk/',
             'version' => '0.1',
             'description' => 'Flash based Tag Cloud for Habari.',
-            'license' => 'GPL 3.0',     // Got to workout this license malarky
+            'license' => 'Apache License 2.0',
+            'guid' => 'F7A0CCFC-C5DF-11DD-A399-37B955D89593',
+            'copyright' => date('%Y')
         );
     }
 
     /**
-	 * Add update beacon support
-     * @todo: add beacon support
+	 * Beacon Support for Update checking
+     *
+     * @access public
+     * @return void
 	 **/
 	public function action_update_check()
 	{
-	 	//Update::add( 'Hb-Cumulus', 'Todo', $this->info->version );
+	 	Update::add( 'HB-Cumulus', $this->info->guid, $this->info->version );
 	}
 
     /**
-	 * When Plugin is activated insert default options
+	 * Plugin activation
+     *
+     * @access public
+     * @param string $file
+     * @return void
 	 */
 	public function action_plugin_activation( $file )
 	{
@@ -55,14 +76,23 @@ class HbCumulus extends Plugin {
 	}
 
     /**
-     * Delete all settings when deactivating the plugin
+     * Plugin De-activation
+     *
+     * @access public
+     * @param string $file
+     * @return void
      */
     public function action_plugin_deactivation( $file ) {
         Options::delete('hb-cumulus__options');
     }
 
     /**
-	 * Show configure option
+	 * Add the Configure option for the plugin
+     *
+     * @access public
+     * @param array $actions
+     * @param string $plugin_id
+     * @return array
 	 */
 	public function filter_plugin_config( $actions, $plugin_id )
 	{
@@ -74,7 +104,12 @@ class HbCumulus extends Plugin {
 
 
 	/**
-	 * Handle special plugin requests
+	 * Plugin UI
+     *
+     * @access public
+     * @param string $plugin_id
+     * @param string $action
+     * @return void
 	 */
 	public function action_plugin_ui( $plugin_id, $action )
 	{
@@ -116,7 +151,7 @@ class HbCumulus extends Plugin {
                         $ui->append( 'checkbox', 'options_distr', 'null:null', _t('Distribute Tags Evenly'), 'optionscontrol_checkbox');
                             $ui->options_distr->value = $this->options['distr'];
 					$ui->append( 'submit', 'save', _t('Save Options') );
-                    $ui->on_success( array($this, 'serializeNStoreOpts') );
+                    $ui->on_success (self::serializeNStoreOpts($ui));
                     $ui->set_option('success_message', _t('Options successfully saved.'));
                     $form_output = $ui->get();
                     echo '<div style="width: 300px; float: right; margin: 10px 25px;"><label>'._t('Preview').'</label>'.$this->get_flashcode(TRUE).'</div>';
@@ -127,10 +162,14 @@ class HbCumulus extends Plugin {
 	}
 
     /**
-     * Action handler: This takes all the options, serializes them and then stores in the options table.
+     * Serialize and Store the Options in a single DB entry in the options table
+     *
+     * @access private
+     * @param object $ui
+     * @return void
      */
 
-     static function serializeNStoreOpts ($ui) {
+     private static function serializeNStoreOpts ($ui) {
         $newOptions = array();
         foreach($ui->controls as $option) {
             if ($option->name == 'save') continue;
@@ -138,11 +177,15 @@ class HbCumulus extends Plugin {
             $newOptions[$name] = $option->value;
         }
         Options::set('hb-cumulus__options', serialize($newOptions));
-
      }
 
      /**
-      * Validate height and width
+      * Validate height and width to ensure they're set and are positive integers
+      * 
+      * @access public
+      * @param string $valid
+      * @param string $value
+      * @return array
       */
     public function filter_validate_heightWidth( $valid, $value )
 	{
@@ -153,25 +196,28 @@ class HbCumulus extends Plugin {
 	}
 
      /**
-      * Validate colour
+      * Validate colour to ensure it's a 6 character value
+      * This isn't really necessary, but it ensure predictable results
+      * 
+      * @access public
+      * @param string $valid
+      * @param string $value
+      * @return array
       */
     public function filter_validate_color( $valid, $value )
     {
-        /*if ( !empty( $this->config['tag_by_color'] ) && 'Y' == $this->config['tag_by_color'] ) {
-            if ( empty( $value ) ) {
-                return array( _t( "A value for this field is required when using 'Popularity by Color'." ) );
-            }*/
-            if ( 0 == preg_match( '/([0-9a-f]){6}$/i', $value ) ) {
-                return array( _t( "Color format must be #dddddd, where 'd' is 0-9 or a-f" ) );
-            }
-        //}
+        if ( 0 == preg_match( '/([0-9a-f]){6}$/i', $value ) ) {
+            return array( _t( "Color format must be #dddddd, where 'd' is 0-9 or a-f" ) );
+        }
         return array();
     }
 
      /**
-	  * Add custom styling and Javascript controls to the footer of the admin interface
+	  * Add custom CSS information to "Configure" page
       *
-      * This won't be necessary if I implement my own FormControls
+      * @access public
+      * @param object $theme
+      * @return void
 	  **/
 	public function action_admin_footer( $theme ) {
         if (Controller::get_var('configure') == $this->plugin_id) {
@@ -193,7 +239,11 @@ class HbCumulus extends Plugin {
     }
 
     /**
-     * The function that generates the code for the cloud
+     * Generate code needed for cloud
+     * 
+     * @access private
+     * @param boolean $config (Optional)
+     * @return string
      */
     private function get_flashcode($config = FALSE) {
         $this->options = unserialize(Options::get('hb-cumulus__options'));
@@ -211,7 +261,7 @@ class HbCumulus extends Plugin {
             $this->options['height'] = ($ratio > 1) ? $max : $max*$ratio;
         }
         ob_start();
-        echo self::build_tag_cloud();
+        echo self::build_tag_cloud($this->options['number']);
         $tagcloud = urlencode( str_replace( "&nbsp;", " ", ob_get_clean() ) );
         $movie =  $this->get_url() .'/tagcloud.swf';
         $path =  $this->get_url();
@@ -244,7 +294,10 @@ class HbCumulus extends Plugin {
     }
 
     /**
-     * Construst SQL from list of tags
+     * Return SQL code needed to exclude tags specified in options
+     * 
+     * @access private
+     * @return string
      */
 
     private function get_hide_tag_list()
@@ -263,7 +316,12 @@ class HbCumulus extends Plugin {
 		}
 	}
 
-
+    /**
+     * Return font size for weighting
+     *
+     * @param int $weight
+     * @return string
+     */
     private function get_font_size_for_weight( $weight ) {
         $most_size = $this->options['maxfont'];
         $least_size = $this->options['minfont'];
@@ -275,6 +333,12 @@ class HbCumulus extends Plugin {
         return intval( $fontsize ) . "pt";
     }
 
+    /**
+     * Return integer for total usage for tag
+     *
+     * @access private
+     * @return int
+     */
     private function get_total_tag_usage_count()
 	{
 		$post_type = Post::type( 'entry' );
@@ -296,6 +360,12 @@ class HbCumulus extends Plugin {
 		return ( !empty( $result ) ? $result->cnt : 0 );
 	}
 
+    /**
+     * Get most popular tag count.
+     *
+     * @access private
+     * @return int
+     */
 	private function get_most_popular_tag_count()
 	{
 		$post_type = Post::type( 'entry' );
@@ -320,26 +390,25 @@ class HbCumulus extends Plugin {
 		return ( !empty( $result ) ? $result->cnt : 0 );
 	}
 
+    /**
+     * Return the string list of tags used to form the cloud
+     *
+     * @access private
+     * @param int $num_tag
+     * @return string
+     */
 	private function build_tag_cloud( $num_tag = '' )
 	{
 		$tag_cloud = '';
 		$post_type = Post::type( 'entry' );
 		$post_status = Post::status( 'published' );
 
-        /* No limit
-		if ( empty( $num_tag ) ) {
-			$limit = ( empty( $this->config['num_tag'] ) ? '' : "LIMIT {$this->config['num_tag']}" );
-		}
-		else {
-			$limit = "LIMIT {$num_tag}";
-		}
-         */
-        $limit = '';
+		$limit = ( empty( $num_tag ) ) ? '' : "LIMIT {$num_tag}";
+
 		$hide_tags = self::get_hide_tag_list();
 		$total_tag_cnt = self::get_total_tag_usage_count();
 		$most_popular_tag_cnt = self::get_most_popular_tag_count();
 
-		// Get tag and usage count descending
 		$sql = "
 			SELECT t.tag_text AS tag_text, t.tag_slug AS tag_slug, t.id AS id,
 				COUNT(t2p.post_id) AS cnt,
@@ -371,19 +440,40 @@ class HbCumulus extends Plugin {
 		return $tag_cloud;
 	}
 
-    /* We use formatting here as we don't want the tag added to a post replaced by all the source code.
-     * This is so the posts don't display rubbish or errors if the plugin is deactivated.
+    /**
+     * Format post content. Calls HbCumulusFormat::hbcumulus.
+     *
+     * We use Format here instead of filter_post_content_out to ensure the code isn't actually replace
+     * until the page is displayed.  This prevents errors or the display of rubbish in the event the
+     * plugin is deactivated.
+     *
+     * @access public
+     * @return void
      */
     public function action_init()
     {
             Format::apply( 'hbcumulus', 'post_content_out' );
     }
 
+    /**
+     * Replace any instance of the <!-- hb-cumulus --> tag with the Flash tag cloud.
+     *
+     * @access public
+     * @param string $content
+     * @return string
+     */
     public function filter_hbcumulus ( $content) {
-        $content= preg_replace( '/<!--\s*hb-cumulus\s*-->/', $this->get_flashcode(), $content );
+        $content= preg_replace( '/<!--\s*hb-cumulus\s*-->/i', $this->get_flashcode(), $content );
         return $content;
     }
 
+    /**
+     * Adds functionality for inclusion in Theme files.
+     * Implements the $theme->hbcumulus(); functionality
+     *
+     * @param object $theme
+     * @return string
+     */
     public function theme_hbcumulus($theme) {
         return $this->get_flashcode();
     }
