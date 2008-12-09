@@ -151,7 +151,7 @@ class HbCumulus extends Plugin {
                         $ui->append( 'checkbox', 'options_distr', 'null:null', _t('Distribute Tags Evenly'), 'optionscontrol_checkbox');
                             $ui->options_distr->value = $this->options['distr'];
 					$ui->append( 'submit', 'save', _t('Save Options') );
-                    $ui->on_success (self::serializeNStoreOpts($ui));
+                    $ui->on_success (array($this, 'serializeNStoreOpts'));
                     $ui->set_option('success_message', _t('Options successfully saved.'));
                     $form_output = $ui->get();
                     echo '<div style="width: 300px; float: right; margin: 10px 25px;"><label>'._t('Preview').'</label>'.$this->get_flashcode(TRUE).'</div>';
@@ -164,12 +164,13 @@ class HbCumulus extends Plugin {
     /**
      * Serialize and Store the Options in a single DB entry in the options table
      *
-     * @access private
+     * @access public
+     * @static
      * @param object $ui
      * @return void
      */
 
-     private static function serializeNStoreOpts ($ui) {
+     public static function serializeNStoreOpts ($ui) {
         $newOptions = array();
         foreach($ui->controls as $option) {
             if ($option->name == 'save') continue;
