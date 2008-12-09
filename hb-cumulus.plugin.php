@@ -207,7 +207,7 @@ class HbCumulus extends Plugin {
     public function filter_validate_color( $valid, $value )
     {
         if ( 0 == preg_match( '/([0-9a-f]){6}$/i', $value ) ) {
-            return array( _t( "Colour should must be in the form dddddd, where 'd' is 0-9 or a-f" ) );
+            return array( _t( "Colour should be in the form dddddd, where 'd' is 0-9 or a-f" ) );
         }
         return array();
     }
