@@ -225,8 +225,8 @@ class HbCumulus extends Plugin {
             if (Version::HABARI_VERSION == '0.5.2') {
                 $output .= 'form#hbcumulus .formcontrol { line-height:24px; height:30px; }';
                 $output .= 'form#hbcumulus #save input { float:none; }';
-                $output .= 'form#hbcumulus p { margin: none; }';
-                $output .= 'form#hbcumulus .error {background:none !important; border:none; margin:none; padding:none;}';
+                $output .= 'form#hbcumulus p { margin: none !important; }';
+                $output .= 'form#hbcumulus .error {background:none !important; border:none; margin:none !important; padding:none;}';
 
             } else {
                 $output .= 'form#hbcumulus .formcontrol { line-height:24px; height:18px; }';
