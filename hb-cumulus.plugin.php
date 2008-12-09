@@ -207,7 +207,7 @@ class HbCumulus extends Plugin {
     public function filter_validate_color( $valid, $value )
     {
         if ( 0 == preg_match( '/([0-9a-f]){6}$/i', $value ) ) {
-            return array( _t( "Color format must be #dddddd, where 'd' is 0-9 or a-f" ) );
+            return array( _t( "Colour should must be in the form dddddd, where 'd' is 0-9 or a-f" ) );
         }
         return array();
     }
@@ -223,16 +223,18 @@ class HbCumulus extends Plugin {
         if (Controller::get_var('configure') == $this->plugin_id) {
             $output = '<style type="text/css">';
             if (Version::HABARI_VERSION == '0.5.2') {
-                $output .= 'form#hbcumulus .formcontrol { line-height: 24px; height: 30px; }';
+                $output .= 'form#hbcumulus .formcontrol { line-height:24px; height:30px; }';
                 $output .= 'form#hbcumulus #save input { float:none; }';
+                $output .= 'form#hbcumulus p { margin: none; }';
+                $output .= 'form#hbcumulus .error {background:none !important; border:none; margin:none; padding:none;}';
 
             } else {
-                $output .= 'form#hbcumulus .formcontrol { line-height: 24px; height: 18px; }';
+                $output .= 'form#hbcumulus .formcontrol { line-height:24px; height:18px; }';
             }
-        $output .= 'form#hbcumulus span.pct25 select { width: 85%; }';
-        $output .= 'form#hbcumulus span.pct25 { text-align: right; }';
-        $output .= 'form#hbcumulus span.pct5 input { margin-left: 25px; }';
-        $output .= 'form#hbcumulus p.error { float: left; color: #A00; }';
+        $output .= 'form#hbcumulus span.pct25 select { width:85%; }';
+        $output .= 'form#hbcumulus span.pct25 { text-align:right; }';
+        $output .= 'form#hbcumulus span.pct5 input { margin-left:25px; }';
+        $output .= 'form#hbcumulus p.error { float:left; color:#A00; }';
         $output .= '</style>';
         echo $output;
         }
