@@ -45,7 +45,10 @@ class HbCumulus extends Plugin {
                 'trans' => FALSE,
                 'distr' => FALSE,
                 'hide' => '',
-                'mode' => 'tags'
+                'mode' => 'tags',
+                'minfont' => '8',
+                'maxfont' => '25',
+                'number' => '30'
             );
 			Options::set('hb-cumulus__options', serialize($defOptions));
 		}
@@ -102,6 +105,12 @@ class HbCumulus extends Plugin {
                             $ui->options_speed->value = $this->options['speed'];
                         $ui->append( 'text', 'options_hide', 'null:null', _t('Tag(s) to be Hidden'), 'optionscontrol_text');
                             $ui->options_hide->value = $this->options['hide'];
+                        $ui->append( 'text', 'options_minfont', 'null:null', _t('Minimum Font Size (pt)'), 'optionscontrol_text');
+                            $ui->options_minfont->value = $this->options['minfont'];
+                        $ui->append( 'text', 'options_maxfont', 'null:null', _t('Maximum Font Size (pt)'), 'optionscontrol_text');
+                            $ui->options_maxfont->value = $this->options['maxfont'];
+                        $ui->append( 'text', 'options_number', 'null:null', _t('Number of Tags to Show'), 'optionscontrol_text');
+                            $ui->options_number->value = $this->options['number'];
                         $ui->append( 'checkbox', 'options_trans', 'null:null', _t('Use Transparent Mode'), 'optionscontrol_checkbox');
                             $ui->options_trans->value = $this->options['trans'];
                         $ui->append( 'checkbox', 'options_distr', 'null:null', _t('Distribute Tags Evenly'), 'optionscontrol_checkbox');
@@ -256,8 +265,8 @@ class HbCumulus extends Plugin {
 
 
     private function get_font_size_for_weight( $weight ) {
-        $most_size = "25";
-        $least_size = "8";
+        $most_size = $this->options['maxfont'];
+        $least_size = $this->options['minfont'];
         if ( $most_size > $least_size ) {
             $fontsize = ( ( $weight / 100 ) * ( $most_size - $least_size ) ) + $least_size;
         } else {
