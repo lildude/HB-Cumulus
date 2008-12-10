@@ -154,7 +154,7 @@ class HbCumulus extends Plugin {
                     $ui->on_success (array($this, 'serializeNStoreOpts'));
                     $ui->set_option('success_message', _t('Options successfully saved.'));
                     $form_output = $ui->get();
-                    echo '<div style="width: 300px; float: right; margin: 10px 25px;"><label>'._t('Preview').'</label>'.$this->get_flashcode(TRUE).'</div>';
+                    echo '<div style="width: 300px; float: right; margin: 10px 25px;"><label>'._t('Preview').'</label>'.$this->get_flashcode('config', TRUE).'</div>';
                     echo $form_output;
 				break;
             }
@@ -208,11 +208,7 @@ class HbCumulus extends Plugin {
     public function filter_validate_color( $valid, $value )
     {
         if ( 0 == preg_match( '/([0-9a-f]){6}$/i', $value ) ) {
-<<<<<<< local
-            return array( _t( "Color format must be #dddddd, where 'd' is 0-9 or a-f" ) );
-=======
             return array( _t( "Colour should be in the form dddddd, where 'd' is 0-9 or a-f" ) );
->>>>>>> other
         }
         return array();
     }
@@ -247,11 +243,13 @@ class HbCumulus extends Plugin {
      * Generate code needed for cloud
      * 
      * @access private
-     * @param boolean $config (Optional)
+     * @param string $class (Optional) Provide distinct class names so multiple occurances can occur on the same page
+     * @param boolean $config (Optional) Scales image to fit within 300x300 div as used in the config section of the plugin
      * @return string
      */
-    private function get_flashcode($config = FALSE) {
+    private function get_flashcode($class = '', $config = FALSE) {
         $this->options = unserialize(Options::get('hb-cumulus__options'));
+        $class = ($class != '') ? "_$class" : '';
         $flashtag = '';
         if ($config) {
             if ( $this->options['width'] < 300 && $this->options['height'] < 300) {
@@ -273,9 +271,9 @@ class HbCumulus extends Plugin {
         // write flash tag
         $flashtag .= '<!-- SWFObject embed by Geoff Stearns geoff@deconcept.com http://blog.deconcept.com/swfobject/ -->';
         $flashtag .= '<script type="text/javascript" src="'.$path.'/swfobject.js"></script>';
-        $flashtag .= '<div id="hbcumulus"><p style="display:none;">';
+        $flashtag .= '<div id="hbcumulus'.$class.'"><p style="display:none;">';
         $flashtag .= urldecode($tagcloud);
-        $flashtag .= '</p><p>HB Cumulus Flash tag cloud by <a href="http://www.colinseymour.co.uk">Colin Seymour</a> requires Flash Player 9 or better and can only be displayed once per page.</p></div>';
+        $flashtag .= '</p><p>HB Cumulus Flash tag cloud by <a href="http://www.colinseymour.co.uk">Colin Seymour</a> requires Flash Player 9 or better.</p></div>';
         $flashtag .= '<script type="text/javascript">';
         $flashtag .= 'var rnumber = Math.floor(Math.random()*9999999);'; // force loading of movie to fix IE weirdness
         $flashtag .= 'var so = new SWFObject("'.$movie.'?r="+rnumber, "tagcloudflash", "'.$this->options['width'].'", "'.$this->options['height'].'", "9", "#'.$this->options['bgcolor'].'");';
@@ -293,7 +291,7 @@ class HbCumulus extends Plugin {
         if( $this->options['mode'] != "cats" ){
             $flashtag .= 'so.addVariable("tagcloud", "'.urlencode('<tags>') . $tagcloud . urlencode('</tags>').'");';
         }
-        $flashtag .= 'so.write("hbcumulus");';
+        $flashtag .= 'so.write("hbcumulus'.$class.'");';
         $flashtag .= '</script>';
         return $flashtag;
     }
@@ -468,7 +466,7 @@ class HbCumulus extends Plugin {
      * @return string
      */
     public function filter_hbcumulus ( $content) {
-        $content= preg_replace( '/<!--\s*hb-cumulus\s*-->/i', $this->get_flashcode(), $content );
+        $content= preg_replace( '/<!--\s*hb-cumulus\s*-->/i', $this->get_flashcode('post'), $content );
         return $content;
     }
 
@@ -480,7 +478,7 @@ class HbCumulus extends Plugin {
      * @return string
      */
     public function theme_hbcumulus($theme) {
-        return $this->get_flashcode();
+        return $this->get_flashcode('theme');
     }
 
 }
