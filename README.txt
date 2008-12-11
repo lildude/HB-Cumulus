@@ -13,7 +13,7 @@ HB-Cumulus is a port of the brilliant WP-Cumulus (http://wordpress.org/extend/pl
 FUNCTIONALITY
 -------------
 
-I’ve implemented all the functionality offered by WP-Cumulus 1.17 and a bit more.
+I've implemented all the functionality offered by WP-Cumulus 1.17 and a bit more.
 
 Functionality includes the ability to set...
 
@@ -35,7 +35,7 @@ INSTALLATION
    3. Move the hb-cumulus directory to /path/to/your/habari/user/plugins/
    4. Refresh your plugins page, activate the plugin and configure it to suit your needs
 
-That’s it. You’re ready to implement the cloud into your site.
+That's it. You're ready to implement the cloud into your site.
 
 
 USAGE
@@ -49,7 +49,7 @@ There are two ways you can use HB-Cumulus:
 
       <!-- hb-cumulus -->
 
-      This tag is NOT case sensitive, so don’t worry too much about the case or spacing. So long as you have all of the above characters in that order, it should display.
+      This tag is NOT case sensitive, so don't worry too much about the case or spacing. So long as you have all of the above characters in that order, it should display.
 
    2. In ANY theme file:
 
@@ -57,7 +57,7 @@ There are two ways you can use HB-Cumulus:
 
       $theme->hbcumulus();
 
-      This IS case sensitive, so you’ll need to be sure you get it 100% correct.
+      This IS case sensitive, so you'll need to be sure you get it 100% correct.
 
 
 ADDITIONAL INFORMATION
@@ -83,6 +83,6 @@ There are a couple of things worth noting for reference purposes:
 
       More information about the options marked with * can be found on the WP-Cumulus notes page.
     * Hb-Cumulus will work with Habari 0.5.2 and the latest SVN code.
-    * Habari has no concept of categories at the moment, so it’ll only show tags. If and when Habari gets categories, I’ll update the plugin to support categories too.
+    * Habari has no concept of categories at the moment, so it'll only show tags. If and when Habari gets categories, I'll update the plugin to support categories too.
 
-That’s it folks. If you encounter any problems, please feel free to leave a comment on the post that relates to the release.
+That's it folks. If you encounter any problems, please feel free to leave a comment on the post that relates to the release.
