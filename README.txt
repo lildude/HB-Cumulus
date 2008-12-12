@@ -1,4 +1,4 @@
-Plugin: HB-Cumulus
+Plugin: HB-Cumulus 1.0
 URL: http://www.lildude.co.uk/projects/hb-cumulus
 Plugin Author: Colin Seymour - http://www.colinseymour.co.uk
 Credit goes to: Roy Tanck for the original WP-Cumulus plugin and Geoff Stearns for SWFObject as used by Roy's work.
@@ -79,7 +79,7 @@ There are a couple of things worth noting for reference purposes:
           o List of tags to hide: <not set> - this can be a space or comma separated list
           o Minimum Font Size: 8pt
           o Maximum Font Size: 25pt
-          o Number of Tags to show: 30
+          o Number of Tags to show: 30 - set to 0 or nothing to show all tags
 
       More information about the options marked with * can be found on the WP-Cumulus notes page.
     * Hb-Cumulus will work with Habari 0.5.2 and the latest SVN code.
