@@ -83,7 +83,9 @@ class HbCumulus extends Plugin {
      * @return void
      */
     public function action_plugin_deactivation( $file ) {
-        Options::delete('hb-cumulus__options');
+        if ( realpath( $file ) == __FILE__ ) {
+            Options::delete('hb-cumulus__options');
+        }
     }
 
     /**
