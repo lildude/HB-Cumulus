@@ -4,7 +4,7 @@
  * HB-Cumulus is a port of the very popular Wordpress version (WP-Cumulus) written by Roy Tanck.
  * 
  * @package HbCumulus
- * @version 1.0
+ * @version 1.1
  * @author Colin Seymour - http://www.colinseymour.co.uk
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache License 2.0 (unless otherwise stated)
  * @link http://www.lildude.co.uk/projects/hb-cumulus
@@ -26,7 +26,7 @@ class HbCumulus extends Plugin {
             'url' => 'http://www.lildude.co.uk/projects/hb-cumulus',
             'author' => 'Colin Seymour',
             'authorurl' => 'http://www.colinseymour.co.uk/',
-            'version' => '1.0',
+            'version' => '1.1',
             'description' => 'Flash based Tag Cloud for Habari.',
             'license' => 'Apache License 2.0',
             'guid' => 'F7A0CCFC-C5DF-11DD-A399-37B955D89593',

@@ -1,4 +1,4 @@
-Plugin: HB-Cumulus 1.0
+Plugin: HB-Cumulus 1.1
 URL: http://www.lildude.co.uk/projects/hb-cumulus
 Plugin Author: Colin Seymour - http://www.colinseymour.co.uk
 Credit goes to: Roy Tanck for the original WP-Cumulus plugin and Geoff Stearns for SWFObject as used by Roy's work.
@@ -84,5 +84,12 @@ There are a couple of things worth noting for reference purposes:
       More information about the options marked with * can be found on the WP-Cumulus notes page.
     * Hb-Cumulus will work with Habari 0.5.2 and the latest SVN code.
     * Habari has no concept of categories at the moment, so it'll only show tags. If and when Habari gets categories, I'll update the plugin to support categories too.
+
+
+REVISION HISTORY
+----------------
+
+1.1     - Fixed bug in plugin de-activation that caused HB-Cumulus settings to be deleted when other plugins were de-activated.
+1.0     - Initial release
 
 That's it folks. If you encounter any problems, please feel free to leave a comment on the post that relates to the release.
