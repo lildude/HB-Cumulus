@@ -4,7 +4,7 @@
  * HB-Cumulus is a port of the very popular Wordpress version (WP-Cumulus) written by Roy Tanck.
  * 
  * @package HbCumulus
- * @version 1.1
+ * @version 1.1r38
  * @author Colin Seymour - http://www.colinseymour.co.uk
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache License 2.0 (unless otherwise stated)
  * @link http://www.lildude.co.uk/projects/hb-cumulus
@@ -26,7 +26,7 @@ class HbCumulus extends Plugin {
             'url' => 'http://www.lildude.co.uk/projects/hb-cumulus',
             'author' => 'Colin Seymour',
             'authorurl' => 'http://www.colinseymour.co.uk/',
-            'version' => '1.1',
+            'version' => '1.1r38',
             'description' => 'Flash based Tag Cloud for Habari.',
             'license' => 'Apache License 2.0',
             'guid' => 'F7A0CCFC-C5DF-11DD-A399-37B955D89593',
@@ -71,7 +71,7 @@ class HbCumulus extends Plugin {
                 'maxfont' => '25',
                 'number' => '30'
             );
-			Options::set('hb-cumulus__options', serialize($defOptions));
+			Options::set('hb-cumulus__options', $defOptions);
 		}
 	}
 
@@ -118,7 +118,7 @@ class HbCumulus extends Plugin {
 		if ( $plugin_id == $this->plugin_id() ) {
 			switch ( $action ) {
 				case _t('Configure'):
-                    $this->options = unserialize(Options::get('hb-cumulus__options'));
+                    $this->options = Options::get('hb-cumulus__options');
 					$ui= new FormUI( strtolower( get_class( $this ) ) );
                         $ui->append( 'hidden', 'option_mode', 'null:null');
                             $ui->option_mode->value = $this->options['mode'];
@@ -153,7 +153,7 @@ class HbCumulus extends Plugin {
                         $ui->append( 'checkbox', 'options_distr', 'null:null', _t('Distribute Tags Evenly'), 'optionscontrol_checkbox');
                             $ui->options_distr->value = $this->options['distr'];
 					$ui->append( 'submit', 'save', _t('Save Options') );
-                    $ui->on_success (array($this, 'serializeNStoreOpts'));
+                    $ui->on_success (array($this, 'storeOpts'));
                     $ui->set_option('success_message', _t('Options successfully saved.'));
                     $form_output = $ui->get();
                     echo '<div style="width: 300px; float: right; margin: 10px 25px;"><label>'._t('Preview').'</label>'.$this->get_flashcode('config', TRUE).'</div>';
@@ -172,14 +172,14 @@ class HbCumulus extends Plugin {
      * @return void
      */
 
-     public static function serializeNStoreOpts ($ui) {
+     public static function storeOpts ($ui) {
         $newOptions = array();
         foreach($ui->controls as $option) {
             if ($option->name == 'save') continue;
             list($a, $name) = explode('_', $option->name);
             $newOptions[$name] = $option->value;
         }
-        Options::set('hb-cumulus__options', serialize($newOptions));
+        Options::set('hb-cumulus__options', $newOptions);
      }
 
      /**
@@ -250,7 +250,7 @@ class HbCumulus extends Plugin {
      * @return string
      */
     private function get_flashcode($class = '', $config = FALSE) {
-        $this->options = unserialize(Options::get('hb-cumulus__options'));
+        $this->options = Options::get('hb-cumulus__options');
         $class = ($class != '') ? "_$class" : '';
         $flashtag = '';
         if ($config) {
