@@ -1,4 +1,4 @@
-Plugin: HB-Cumulus 1.1
+Plugin: HB-Cumulus 1.2
 URL: http://www.lildude.co.uk/projects/hb-cumulus
 Plugin Author: Colin Seymour - http://www.colinseymour.co.uk
 Credit goes to: Roy Tanck for the original WP-Cumulus plugin and Geoff Stearns for SWFObject as used by Roy's work.
