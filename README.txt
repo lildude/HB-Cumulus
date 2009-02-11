@@ -13,7 +13,7 @@ HB-Cumulus is a port of the brilliant WP-Cumulus (http://wordpress.org/extend/pl
 FUNCTIONALITY
 -------------
 
-I've implemented all the functionality offered by WP-Cumulus 1.17 and a bit more.
+I've implemented all the functionality offered by WP-Cumulus 1.18 and a bit more.
 
 Functionality includes the ability to set...
 

@@ -114,7 +114,7 @@ class HbCumulus extends Plugin
     public function action_plugin_deactivation( $file )
 	{
         if ( realpath( $file ) == __FILE__ ) {
-            //Options::delete(Schnazzy);
+            //Options::delete(self::OPTNAME);
         }
     }
 
@@ -148,7 +148,7 @@ class HbCumulus extends Plugin
 		if ( $plugin_id == $this->plugin_id() ) {
 			switch ( $action ) {
 				case _t( 'Configure' ):
-                    $this->options = Options::get( Schnazzy );
+                    $this->options = Options::get( self::OPTNAME );
 					$ui= new FormUI( strtolower( get_class( $this ) ) );
                         $ui->append( 'hidden', 'option_mode', 'null:null' );
                             $ui->option_mode->value = $this->options['mode'];
@@ -210,7 +210,7 @@ class HbCumulus extends Plugin
             list( $a, $name ) = explode( '_', $option->name );
             $newOptions[$name] = $option->value;
         }
-        Options::set( Schnazzy, $newOptions );
+        Options::set( self::OPTNAME, $newOptions );
      }
 
      /**
@@ -283,7 +283,7 @@ class HbCumulus extends Plugin
      */
     private function get_flashcode( $class = '', $config = FALSE )
 	{
-        $this->options = Options::get( Schnazzy );
+        $this->options = Options::get( self::OPTNAME );
         $class = ( $class != '' ) ? "_$class" : '';
         $flashtag = '';
         if ( $config ) {
