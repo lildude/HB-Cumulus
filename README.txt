@@ -89,6 +89,9 @@ There are a couple of things worth noting for reference purposes:
 REVISION HISTORY
 ----------------
 
+1.2     - Updated tagcloud.swf to that provided with WP-Cumulus 1.1.8, which includes the following fix:
+            "Improves mouse detection in transparent mode"
+        - Also sorted out the documenting of the licensing of the various components
 1.1     - Fixed bug in plugin de-activation that caused HB-Cumulus settings to be deleted when other plugins were de-activated.
 1.0     - Initial release
 
