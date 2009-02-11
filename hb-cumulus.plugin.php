@@ -22,15 +22,17 @@
  * HB-Cumulus is a port of the very popular Wordpress version (WP-Cumulus) written by Roy Tanck.
  * 
  * @package HbCumulus
- * @version 1.1r41
+ * @version 1.2
  * @author Colin Seymour - http://www.colinseymour.co.uk
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache License 2.0 (unless otherwise stated)
  * @link http://www.lildude.co.uk/projects/hb-cumulus
  */
 
-class HbCumulus extends Plugin {
+class HbCumulus extends Plugin
+{
 
     private $options = array();
+    const OPTNAME = 'hb-cumulus__options';
 
     /**
      * Plugin information
@@ -38,17 +40,18 @@ class HbCumulus extends Plugin {
      * @access public
      * @return void
      */
-    public function info() {
+    public function info()
+	{
         return array (
             'name' => 'HB-Cumulus',
             'url' => 'http://www.lildude.co.uk/projects/hb-cumulus',
             'author' => 'Colin Seymour',
             'authorurl' => 'http://www.colinseymour.co.uk/',
-            'version' => '1.1r41',
+            'version' => '1.2',
             'description' => 'Flash based Tag Cloud for Habari.',
             'license' => 'Apache License 2.0',
             'guid' => 'F7A0CCFC-C5DF-11DD-A399-37B955D89593',
-            'copyright' => date('%Y')
+            'copyright' => date( '%Y' )
         );
     }
 
@@ -72,7 +75,7 @@ class HbCumulus extends Plugin {
 	 */
 	public function action_plugin_activation( $file )
 	{
-		if(Plugins::id_from_file($file) == Plugins::id_from_file(__FILE__)) {
+		if( Plugins::id_from_file( $file ) == Plugins::id_from_file( __FILE__ ) ) {
             $defOptions = array(
                 'width' => '250',
                 'height' => '250',
@@ -89,7 +92,15 @@ class HbCumulus extends Plugin {
                 'maxfont' => '25',
                 'number' => '30'
             );
-			Options::set('hb-cumulus__options', $defOptions);
+
+            $this->options = Options::get( self::OPTNAME );
+
+			if ( empty( $this->options ) ) {
+				Options::set( self::OPTNAME, $defOptions );
+			}
+			else {
+				Session::notice( _t( 'Using previous HB-Cumulus options' ) );
+			}
 		}
 	}
 
@@ -100,9 +111,10 @@ class HbCumulus extends Plugin {
      * @param string $file
      * @return void
      */
-    public function action_plugin_deactivation( $file ) {
+    public function action_plugin_deactivation( $file )
+	{
         if ( realpath( $file ) == __FILE__ ) {
-            Options::delete('hb-cumulus__options');
+            //Options::delete(Schnazzy);
         }
     }
 
@@ -117,7 +129,7 @@ class HbCumulus extends Plugin {
 	public function filter_plugin_config( $actions, $plugin_id )
 	{
 		if ( $plugin_id == $this->plugin_id() ) {
-			$actions[]= _t('Configure');
+			$actions[]= _t( 'Configure' );
 		}
 		return $actions;
 	}
@@ -135,46 +147,46 @@ class HbCumulus extends Plugin {
 	{
 		if ( $plugin_id == $this->plugin_id() ) {
 			switch ( $action ) {
-				case _t('Configure'):
-                    $this->options = Options::get('hb-cumulus__options');
+				case _t( 'Configure' ):
+                    $this->options = Options::get( Schnazzy );
 					$ui= new FormUI( strtolower( get_class( $this ) ) );
-                        $ui->append( 'hidden', 'option_mode', 'null:null');
+                        $ui->append( 'hidden', 'option_mode', 'null:null' );
                             $ui->option_mode->value = $this->options['mode'];
-                        $ui->append( 'text', 'options_width', 'null:null', _t('Width of Flash Tag Cloud (px)'), 'optionscontrol_text');
+                        $ui->append( 'text', 'options_width', 'null:null', _t( 'Width of Flash Tag Cloud (px)' ), 'optionscontrol_text' );
                             $ui->options_width->value = $this->options['width'];
                             $ui->options_width->add_validator( 'validate_heightWidth' );
-                        $ui->append( 'text', 'options_height', 'null:null', _t('Height of Flash Tag Cloud (px)'), 'optionscontrol_text');
+                        $ui->append( 'text', 'options_height', 'null:null', _t( 'Height of Flash Tag Cloud (px)' ), 'optionscontrol_text' );
                             $ui->options_height->value = $this->options['height'];
                             $ui->options_height->add_validator( 'validate_heightWidth' );
-                        $ui->append( 'text', 'options_tcolor', 'null:null', _t('Color of the Tags'), 'optionscontrol_text');
+                        $ui->append( 'text', 'options_tcolor', 'null:null', _t( 'Color of the Tags' ), 'optionscontrol_text' );
                             $ui->options_tcolor->value = $this->options['tcolor'];
                             $ui->options_tcolor->add_validator( 'validate_color' );
-                        $ui->append( 'text', 'options_tcolor2', 'null:null', _t('Second Color for Gradient (opt)'), 'optionscontrol_text');
+                        $ui->append( 'text', 'options_tcolor2', 'null:null', _t( 'Second Color for Gradient (opt)' ), 'optionscontrol_text' );
                             $ui->options_tcolor2->value = $this->options['tcolor2'];
-                        $ui->append( 'text', 'options_hicolor', 'null:null', _t('Highlight Color (opt)'), 'optionscontrol_text');
+                        $ui->append( 'text', 'options_hicolor', 'null:null', _t( 'Highlight Color (opt)' ), 'optionscontrol_text' );
                             $ui->options_hicolor->value = $this->options['hicolor'];
-                        $ui->append( 'text', 'options_bgcolor', 'null:null', _t('Background Color'), 'optionscontrol_text');
+                        $ui->append( 'text', 'options_bgcolor', 'null:null', _t( 'Background Color' ), 'optionscontrol_text' );
                             $ui->options_bgcolor->value = $this->options['bgcolor'];
                             $ui->options_bgcolor->add_validator( 'validate_color' );
-                        $ui->append( 'text', 'options_speed', 'null:null', _t('Rotation Speed'), 'optionscontrol_text');
+                        $ui->append( 'text', 'options_speed', 'null:null', _t( 'Rotation Speed' ), 'optionscontrol_text' );
                             $ui->options_speed->value = $this->options['speed'];
-                        $ui->append( 'text', 'options_hide', 'null:null', _t('Tag(s) to be Hidden'), 'optionscontrol_text');
+                        $ui->append( 'text', 'options_hide', 'null:null', _t( 'Tag(s) to be Hidden' ), 'optionscontrol_text' );
                             $ui->options_hide->value = $this->options['hide'];
-                        $ui->append( 'text', 'options_minfont', 'null:null', _t('Minimum Font Size (pt)'), 'optionscontrol_text');
+                        $ui->append( 'text', 'options_minfont', 'null:null', _t( 'Minimum Font Size (pt)' ), 'optionscontrol_text' );
                             $ui->options_minfont->value = $this->options['minfont'];
-                        $ui->append( 'text', 'options_maxfont', 'null:null', _t('Maximum Font Size (pt)'), 'optionscontrol_text');
+                        $ui->append( 'text', 'options_maxfont', 'null:null', _t( 'Maximum Font Size (pt)' ), 'optionscontrol_text' );
                             $ui->options_maxfont->value = $this->options['maxfont'];
-                        $ui->append( 'text', 'options_number', 'null:null', _t('Number of Tags to Show'), 'optionscontrol_text');
+                        $ui->append( 'text', 'options_number', 'null:null', _t( 'Number of Tags to Show' ), 'optionscontrol_text' );
                             $ui->options_number->value = $this->options['number'];
-                        $ui->append( 'checkbox', 'options_trans', 'null:null', _t('Use Transparent Mode'), 'optionscontrol_checkbox');
+                        $ui->append( 'checkbox', 'options_trans', 'null:null', _t( 'Use Transparent Mode' ), 'optionscontrol_checkbox' );
                             $ui->options_trans->value = $this->options['trans'];
-                        $ui->append( 'checkbox', 'options_distr', 'null:null', _t('Distribute Tags Evenly'), 'optionscontrol_checkbox');
+                        $ui->append( 'checkbox', 'options_distr', 'null:null', _t( 'Distribute Tags Evenly' ), 'optionscontrol_checkbox' );
                             $ui->options_distr->value = $this->options['distr'];
-					$ui->append( 'submit', 'save', _t('Save Options') );
-                    $ui->on_success (array($this, 'storeOpts'));
-                    $ui->set_option('success_message', _t('Options successfully saved.'));
+					$ui->append( 'submit', 'save', _t( 'Save Options' ) );
+                    $ui->on_success ( array( $this, 'storeOpts' ) );
+                    $ui->set_option( 'success_message', _t( 'Options successfully saved.' ) );
                     $form_output = $ui->get();
-                    echo '<div style="width: 300px; float: right; margin: 10px 25px;"><label>'._t('Preview').'</label>'.$this->get_flashcode('config', TRUE).'</div>';
+                    echo '<div style="width: 300px; float: right; margin: 10px 25px;"><label>'._t( 'Preview' ).'</label>'.$this->get_flashcode( 'config', TRUE ).'</div>';
                     echo $form_output;
 				break;
             }
@@ -190,14 +202,15 @@ class HbCumulus extends Plugin {
      * @return void
      */
 
-     public static function storeOpts ($ui) {
+     public static function storeOpts ( $ui )
+	 {
         $newOptions = array();
-        foreach($ui->controls as $option) {
-            if ($option->name == 'save') continue;
-            list($a, $name) = explode('_', $option->name);
+        foreach( $ui->controls as $option ) {
+            if ( $option->name == 'save' ) continue;
+            list( $a, $name ) = explode( '_', $option->name );
             $newOptions[$name] = $option->value;
         }
-        Options::set('hb-cumulus__options', $newOptions);
+        Options::set( Schnazzy, $newOptions );
      }
 
      /**
@@ -210,7 +223,7 @@ class HbCumulus extends Plugin {
       */
     public function filter_validate_heightWidth( $valid, $value )
 	{
-			if ( empty( $value ) || !intval($value) || intval($value) <= 0 ) {
+			if ( empty( $value ) || !intval( $value ) || intval( $value ) <= 0 ) {
 				return array( _t( "An integer value greater than 0 is required." ) );
 			}
 		return array();
@@ -241,13 +254,14 @@ class HbCumulus extends Plugin {
       * @return void
 	  **/
 	public function action_admin_footer( $theme ) {
-        if (Controller::get_var('configure') == $this->plugin_id) {
+        if ( Controller::get_var( 'configure' ) == $this->plugin_id ) {
             $output = '<style type="text/css">';
-            if (Version::HABARI_VERSION == '0.5.2') {
+            if ( Version::HABARI_VERSION == '0.5.2' ) {
                 $output .= 'form#hbcumulus .formcontrol { line-height:24px; height:30px; }';
                 $output .= 'form#hbcumulus #save input { float:none; }';
                 $output .= 'form#hbcumulus p.error {background:none !important; border:none !important; margin-bottom:0 !important; padding:0 !important;}';
-            } else {
+            }
+			else {
                 $output .= 'form#hbcumulus .formcontrol { line-height:24px; height:18px; }';
             }
         $output .= 'form#hbcumulus span.pct25 select { width:85%; }';
@@ -267,30 +281,32 @@ class HbCumulus extends Plugin {
      * @param boolean $config (Optional) Scales image to fit within 300x300 div as used in the config section of the plugin
      * @return string
      */
-    private function get_flashcode($class = '', $config = FALSE) {
-        $this->options = Options::get('hb-cumulus__options');
-        $class = ($class != '') ? "_$class" : '';
+    private function get_flashcode( $class = '', $config = FALSE )
+	{
+        $this->options = Options::get( Schnazzy );
+        $class = ( $class != '' ) ? "_$class" : '';
         $flashtag = '';
-        if ($config) {
-            if ( $this->options['width'] < 300 && $this->options['height'] < 300) {
-                $max = ($this->options['width'] >= $this->options['height']) ? $this->options['width'] : $this->options['height'];
-            } else {
+        if ( $config ) {
+            if ( $this->options['width'] < 300 && $this->options['height'] < 300 ) {
+                $max = ( $this->options['width'] >= $this->options['height'] ) ? $this->options['width'] : $this->options['height'];
+            }
+			else {
                 $max = '300';
                 $flashtag .= '<span> ('._t('Scaled to fit').')</span>';
             }
 
             $ratio = $this->options['height']/$this->options['width'];
-            $this->options['width'] = ($ratio > 1) ? $max*(1/$ratio) : $max;
-            $this->options['height'] = ($ratio > 1) ? $max : $max*$ratio;
+            $this->options['width'] = ( $ratio > 1 ) ? $max*( 1/$ratio ) : $max;
+            $this->options['height'] = ( $ratio > 1 ) ? $max : $max*$ratio;
         }
         ob_start();
-        echo self::build_tag_cloud($this->options['number']);
+        echo self::build_tag_cloud( $this->options['number'] );
         $tagcloud = urlencode( str_replace( "&nbsp;", " ", ob_get_clean() ) );
-        $movie =  $this->get_url() .'/tagcloud.swf';
+        $movie =  $this->get_url() .'/lib/tagcloud.swf';
         $path =  $this->get_url();
         // write flash tag
         $flashtag .= '<!-- SWFObject embed by Geoff Stearns geoff@deconcept.com http://blog.deconcept.com/swfobject/ -->';
-        $flashtag .= '<script type="text/javascript" src="'.$path.'/swfobject.js"></script>';
+        $flashtag .= '<script type="text/javascript" src="'.$path.'/lib/swfobject.js"></script>';
         $flashtag .= '<div id="hbcumulus'.$class.'"><p style="display:none;">';
         $flashtag .= urldecode($tagcloud);
         $flashtag .= '</p><p>HB Cumulus Flash tag cloud by <a href="http://www.colinseymour.co.uk">Colin Seymour</a> requires Flash Player 9 or better.</p></div>';
@@ -328,13 +344,14 @@ class HbCumulus extends Plugin {
 		if ( !empty( $this->options['hide' ] ) ) {
 			$hide_tag_list = '';
             // Convert string into an array
-            $tags = preg_split("/[\s,]+/", $this->options['hide']);
+            $tags = preg_split( "/[\s,]+/", $this->options['hide'] );
 			foreach ( $tags as $tag ) {
 				$hide_tag_list.= ( $hide_tag_list == '' ? "'{$tag}'" : ", '{$tag}'" );
 			}
-			$hide_tag_list = "AND t.tag_slug NOT IN ({$hide_tag_list})";
+			$hide_tag_list = "AND t.tag_slug NOT IN ( {$hide_tag_list} )";
 			return $hide_tag_list;
-		} else {
+		}
+		else {
 			return '';
 		}
 	}
@@ -345,12 +362,14 @@ class HbCumulus extends Plugin {
      * @param int $weight
      * @return string
      */
-    private function get_font_size_for_weight( $weight ) {
+    private function get_font_size_for_weight( $weight )
+	{
         $most_size = $this->options['maxfont'];
         $least_size = $this->options['minfont'];
         if ( $most_size > $least_size ) {
             $fontsize = ( ( $weight / 100 ) * ( $most_size - $least_size ) ) + $least_size;
-        } else {
+        }
+		else {
             $fontsize = ( ( ( 100 - $weight ) / 100 ) * ( $most_size - $least_size ) ) + $most_size;
         }
         return intval( $fontsize ) . "pt";
@@ -485,8 +504,9 @@ class HbCumulus extends Plugin {
      * @param string $content
      * @return string
      */
-    public function filter_hbcumulus ( $content) {
-        $content= preg_replace( '/<!--\s*hb-cumulus\s*-->/i', $this->get_flashcode('post'), $content );
+    public function filter_hbcumulus ( $content)
+	{
+        $content= preg_replace( '/<!--\s*hb-cumulus\s*-->/i', $this->get_flashcode( 'post' ), $content );
         return $content;
     }
 
@@ -497,8 +517,9 @@ class HbCumulus extends Plugin {
      * @param object $theme
      * @return string
      */
-    public function theme_hbcumulus($theme) {
-        return $this->get_flashcode('theme');
+    public function theme_hbcumulus( $theme )
+	{
+        return $this->get_flashcode( 'theme' );
     }
 
 }
