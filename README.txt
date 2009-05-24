@@ -1,4 +1,4 @@
-Plugin: HB-Cumulus 1.2
+Plugin: HB-Cumulus 1.3
 URL: http://www.lildude.co.uk/projects/hb-cumulus
 Plugin Author: Colin Seymour - http://www.colinseymour.co.uk
 Credit goes to: Roy Tanck for the original WP-Cumulus plugin and Geoff Stearns for SWFObject as used by Roy's work.
@@ -13,7 +13,7 @@ HB-Cumulus is a port of the brilliant WP-Cumulus (http://wordpress.org/extend/pl
 FUNCTIONALITY
 -------------
 
-I've implemented all the functionality offered by WP-Cumulus 1.18 and a bit more.
+I've implemented all the functionality offered by WP-Cumulus 1.20 and a bit more.
 
 Functionality includes the ability to set...
 
@@ -36,6 +36,12 @@ INSTALLATION
    4. Refresh your plugins page, activate the plugin and configure it to suit your needs
 
 That's it. You're ready to implement the cloud into your site.
+
+
+UPGRADE
+-------
+
+The upgrade procedure is as per the installation procedure, but please ensure you de-activate the plugin first.  This will ensure your current settings are merged with any new options that may be added with later releases.
 
 
 USAGE
@@ -89,7 +95,11 @@ There are a couple of things worth noting for reference purposes:
 REVISION HISTORY
 ----------------
 
-1.2     - Updated tagcloud.swf to that provided with WP-Cumulus 1.1.8, which includes the following fix:
+1.3		- Updated tagcloud.swf to that provided with WP-Cumulus 1.20, which includes the following relevant fixes:
+			"Fixed the mouse pointer not changing to a hand when hovering tags."
+			"Adds Turkish language support to the Flash movie."
+	    - Like the WP-Cumulus plugin, I've also added a "Compatibility" option.  When this is enabled, the plugin will not use the SWFObject Javascript to embed the Flash.
+1.2     - Updated tagcloud.swf to that provided with WP-Cumulus 1.18, which includes the following fix:
             "Improves mouse detection in transparent mode"
         - Also sorted out the documenting of the licensing of the various components
         - Updated directory structure to better separate the 3rd party components and the HB-Cumulus code

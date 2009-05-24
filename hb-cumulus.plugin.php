@@ -22,7 +22,7 @@
  * HB-Cumulus is a port of the very popular Wordpress version (WP-Cumulus) written by Roy Tanck.
  * 
  * @package HbCumulus
- * @version 1.2r46
+ * @version 1.3
  * @author Colin Seymour - http://www.colinseymour.co.uk
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache License 2.0 (unless otherwise stated)
  * @link http://www.lildude.co.uk/projects/hb-cumulus
@@ -47,7 +47,7 @@ class HbCumulus extends Plugin
             'url' => 'http://www.lildude.co.uk/projects/hb-cumulus',
             'author' => 'Colin Seymour',
             'authorurl' => 'http://www.colinseymour.co.uk/',
-            'version' => '1.2r46',
+            'version' => '1.3',
             'description' => 'Flash based Tag Cloud for Habari.',
             'license' => 'Apache License 2.0',
             'guid' => 'F7A0CCFC-C5DF-11DD-A399-37B955D89593',
@@ -90,7 +90,8 @@ class HbCumulus extends Plugin
                 'mode' => 'tags',
                 'minfont' => '8',
                 'maxfont' => '25',
-                'number' => '30'
+                'number' => '30',
+				'compat' => FALSE
             );
 
             $this->options = Options::get( self::OPTNAME );
@@ -98,7 +99,9 @@ class HbCumulus extends Plugin
 			if ( empty( $this->options ) ) {
 				Options::set( self::OPTNAME, $defOptions );
 			}
-			else {
+			else if ( count( $this->options ) != count( $defOptions ) ) {
+				Options::set( self::OPTNAME, array_merge( $defOptions, $this->options ) );
+			} else {
 				Session::notice( _t( 'Using previous HB-Cumulus options' ) );
 			}
 		}
@@ -182,6 +185,9 @@ class HbCumulus extends Plugin
                             $ui->options_trans->value = $this->options['trans'];
                         $ui->append( 'checkbox', 'options_distr', 'null:null', _t( 'Distribute Tags Evenly' ), 'optionscontrol_checkbox' );
                             $ui->options_distr->value = $this->options['distr'];
+						$ui->append( 'checkbox', 'options_compat', 'null:null', _t( 'Compatibility Mode' ), 'optionscontrol_checkbox' );
+                            $ui->options_compat->value = $this->options['compat'];
+							$ui->options_compat->helptext = _t( 'Enabling this option switches the plugin to a different way of embedding Flash into the page. Use this if your page has markup errors or if you\'re having trouble getting HB-Cumulus to display correctly.' );
 					$ui->append( 'submit', 'save', _t( 'Save Options' ) );
                     $ui->on_success ( array( $this, 'storeOpts' ) );
                     $ui->set_option( 'success_message', _t( 'Options successfully saved.' ) );
@@ -304,31 +310,59 @@ class HbCumulus extends Plugin
         $tagcloud = urlencode( str_replace( "&nbsp;", " ", ob_get_clean() ) );
         $movie =  $this->get_url() .'/lib/tagcloud.swf';
         $path =  $this->get_url();
-        // write flash tag
-        $flashtag .= '<!-- SWFObject embed by Geoff Stearns geoff@deconcept.com http://blog.deconcept.com/swfobject/ -->';
-        $flashtag .= '<script type="text/javascript" src="'.$path.'/lib/swfobject.js"></script>';
-        $flashtag .= '<div id="hbcumulus'.$class.'"><p style="display:none;">';
-        $flashtag .= urldecode($tagcloud);
-        $flashtag .= '</p><p>HB Cumulus Flash tag cloud by <a href="http://www.colinseymour.co.uk">Colin Seymour</a> requires Flash Player 9 or better.</p></div>';
-        $flashtag .= '<script type="text/javascript">';
-        $flashtag .= 'var rnumber = Math.floor(Math.random()*9999999);'; // force loading of movie to fix IE weirdness
-        $flashtag .= 'var so = new SWFObject("'.$movie.'?r="+rnumber, "tagcloudflash", "'.$this->options['width'].'", "'.$this->options['height'].'", "9", "#'.$this->options['bgcolor'].'");';
-        if( $this->options['trans'] == 'true' ){
-            $flashtag .= 'so.addParam("wmode", "transparent");';
-        }
-        $flashtag .= 'so.addParam("allowScriptAccess", "always");';
-        $flashtag .= 'so.addVariable("tcolor", "0x'.$this->options['tcolor'].'");';
-        $flashtag .= 'so.addVariable("tcolor2", "0x' . ($this->options['tcolor2'] == "" ? $this->options['tcolor'] : $this->options['tcolor2']) . '");';
-        $flashtag .= 'so.addVariable("hicolor", "0x' . ($this->options['hicolor'] == "" ? $this->options['tcolor'] : $this->options['hicolor']) . '");';
-        $flashtag .= 'so.addVariable("tspeed", "'.$this->options['speed'].'");';
-        $flashtag .= 'so.addVariable("distr", "'.$this->options['distr'].'");';
-        $flashtag .= 'so.addVariable("mode", "'.$this->options['mode'].'");';
-        // put tags in flashvar
-        if( $this->options['mode'] != "cats" ){
-            $flashtag .= 'so.addVariable("tagcloud", "'.urlencode('<tags>') . $tagcloud . urlencode('</tags>').'");';
-        }
-        $flashtag .= 'so.write("hbcumulus'.$class.'");';
-        $flashtag .= '</script>';
+		if ( $this->options['compat'] ) {
+			// Non-JS method
+			$flashtag = '<object type="application/x-shockwave-flash" data="'.$movie.'" width="'.$this->options['width'].'" height="'.$this->options['height'].'">';
+			$flashtag .= '<param name="movie" value="'.$movie.'" />';
+			$flashtag .= '<param name="bgcolor" value="#'.$this->options['bgcolor'].'" />';
+			$flashtag .= '<param name="AllowScriptAccess" value="always">';
+			if( $this->options['trans'] == 'true' ){
+				$flashtag .= '<param name="wmode" value="transparent">';
+			}
+			$flashtag .= '<param name="flashvars" value="';
+			$flashtag .= 'tcolor=0x' . $this->options['tcolor'];
+			$flashtag .= '&tcolor2=0x' . ($this->options['tcolor2'] == "" ? $this->options['tcolor'] : $this->options['tcolor2']);
+			$flashtag .= '&hicolor=0x' . ($this->options['hicolor'] == "" ? $this->options['tcolor'] : $this->options['hicolor']);
+			$flashtag .= '&tspeed='.$this->options['speed'];
+			$flashtag .= '&distr='.$this->options['distr'];
+			$flashtag .= '&mode='.$this->options['mode'];
+			// put tags in flashvar
+			if( $this->options['mode'] != "cats" ){
+				$flashtag .= '&tagcloud='.urlencode('<tags>') . $tagcloud . urlencode('</tags>');
+			}
+
+			$flashtag .= '" />';
+			$flashtag .= '<div id="hbcumulus'.$class.'"><p style="display:none;">';
+			$flashtag .= urldecode($tagcloud);
+			$flashtag .= '</p><p>HB Cumulus Flash tag cloud by <a href="http://www.colinseymour.co.uk">Colin Seymour</a> requires Flash Player 9 or better.</p></div>';
+			$flashtag .= '</object>';
+		} else {
+			// write flash tag
+			$flashtag .= '<!-- SWFObject embed by Geoff Stearns geoff@deconcept.com http://blog.deconcept.com/swfobject/ -->';
+			$flashtag .= '<script type="text/javascript" src="'.$path.'/lib/swfobject.js"></script>';
+			$flashtag .= '<div id="hbcumulus'.$class.'"><p style="display:none;">';
+			$flashtag .= urldecode($tagcloud);
+			$flashtag .= '</p><p>HB Cumulus Flash tag cloud by <a href="http://www.colinseymour.co.uk">Colin Seymour</a> requires Flash Player 9 or better.</p></div>';
+			$flashtag .= '<script type="text/javascript">';
+			$flashtag .= 'var rnumber = Math.floor(Math.random()*9999999);'; // force loading of movie to fix IE weirdness
+			$flashtag .= 'var so = new SWFObject("'.$movie.'?r="+rnumber, "tagcloudflash", "'.$this->options['width'].'", "'.$this->options['height'].'", "9", "#'.$this->options['bgcolor'].'");';
+			if( $this->options['trans'] == 'true' ){
+				$flashtag .= 'so.addParam("wmode", "transparent");';
+			}
+			$flashtag .= 'so.addParam("allowScriptAccess", "always");';
+			$flashtag .= 'so.addVariable("tcolor", "0x'.$this->options['tcolor'].'");';
+			$flashtag .= 'so.addVariable("tcolor2", "0x' . ($this->options['tcolor2'] == "" ? $this->options['tcolor'] : $this->options['tcolor2']) . '");';
+			$flashtag .= 'so.addVariable("hicolor", "0x' . ($this->options['hicolor'] == "" ? $this->options['tcolor'] : $this->options['hicolor']) . '");';
+			$flashtag .= 'so.addVariable("tspeed", "'.$this->options['speed'].'");';
+			$flashtag .= 'so.addVariable("distr", "'.$this->options['distr'].'");';
+			$flashtag .= 'so.addVariable("mode", "'.$this->options['mode'].'");';
+			// put tags in flashvar
+			if( $this->options['mode'] != "cats" ){
+				$flashtag .= 'so.addVariable("tagcloud", "'.urlencode('<tags>') . $tagcloud . urlencode('</tags>').'");';
+			}
+			$flashtag .= 'so.write("hbcumulus'.$class.'");';
+			$flashtag .= '</script>';
+		}
         return $flashtag;
     }
 
