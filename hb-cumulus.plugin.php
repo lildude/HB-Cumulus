@@ -40,6 +40,7 @@ class HbCumulus extends Plugin
      * @access public
      * @return void
      */
+	/* Removing for post r3624
     public function info()
 	{
         return array (
@@ -53,7 +54,7 @@ class HbCumulus extends Plugin
             'guid' => 'F7A0CCFC-C5DF-11DD-A399-37B955D89593',
             'copyright' => date( '%Y' )
         );
-    }
+    }*/
 
     /**
 	 * Beacon Support for Update checking
