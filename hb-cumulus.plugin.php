@@ -507,9 +507,9 @@ class HbCumulus extends Plugin
 		{$limit}";
 	$results = DB::get_results( $sql );
 
-	sort( $results );
         $tag_cloud = '';
         if ( $results ) {
+	    sort( $results );
 	    foreach ( $results as $tag ) {
 		$style_str = '';
                 $style_str = 'style="font-size: ' . self::get_font_size_for_weight( $tag->relative_weight ) . ';"';
