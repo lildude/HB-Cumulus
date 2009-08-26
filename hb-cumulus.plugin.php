@@ -345,7 +345,7 @@ class HbCumulus extends Plugin
 	} else {
 	    // write flash tag
 	    $flashtag .= '<!-- SWFObject embed by Geoff Stearns geoff@deconcept.com http://blog.deconcept.com/swfobject/ -->';
-	    $flashtag .= '<script type="text/javascript" src="'.$path.'/lib/swfobject.js"></script>';
+	    $flashtag .= '<script type="text/javascript" src="'.$path.'/lib/swfobject-min.js"></script>';
 	    $flashtag .= '<div id="hbcumulus'.$class.'"><p style="display:none;">';
 	    $flashtag .= urldecode($tagcloud);
 	    $flashtag .= '</p><p>HB Cumulus Flash tag cloud by <a href="http://www.colinseymour.co.uk">Colin Seymour</a> requires Flash Player 9 or better.</p></div>';
