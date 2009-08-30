@@ -217,7 +217,7 @@ class HbCumulus extends Plugin
      {
         $newOptions = array();
         foreach( $ui->controls as $option ) {
-            if ( $option->name == 'save' ) continue;
+            if ( $option->name == 'submit' ) continue;
             list( $a, $name ) = explode( '_', $option->name );
             $newOptions[$name] = $option->value;
         }
