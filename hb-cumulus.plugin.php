@@ -22,7 +22,7 @@
  * HB-Cumulus is a port of the very popular Wordpress version (WP-Cumulus) written by Roy Tanck.
  * 
  * @package HbCumulus
- * @version 1.3
+ * @version 0.6-1.3r61
  * @author Colin Seymour - http://www.colinseymour.co.uk
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache License 2.0 (unless otherwise stated)
  * @link http://www.lildude.co.uk/projects/hb-cumulus
@@ -31,6 +31,7 @@
 class HbCumulus extends Plugin
 {
     private $options = array();
+    private $version = '0.6-1.3r61';
     const OPTNAME = 'hb-cumulus__options';
 
     /**
@@ -68,7 +69,7 @@ class HbCumulus extends Plugin
      **/
     public function action_update_check()
     {
-		Update::add( 'HB-Cumulus', 'F7A0CCFC-C5DF-11DD-A399-37B955D89593', '1.3r50' );
+		Update::add( 'HB-Cumulus', 'F7A0CCFC-C5DF-11DD-A399-37B955D89593', $this->version );
     }
 
     /**
