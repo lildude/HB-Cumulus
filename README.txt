@@ -1,4 +1,4 @@
-Plugin: HB-Cumulus 1.3
+Plugin: HB-Cumulus 1.4
 URL: http://www.lildude.co.uk/projects/hb-cumulus
 Plugin Author: Colin Seymour - http://www.colinseymour.co.uk
 Credit goes to: Roy Tanck for the original WP-Cumulus plugin and Geoff Stearns for SWFObject as used by Roy's work.
@@ -95,7 +95,9 @@ There are a couple of things worth noting for reference purposes:
 REVISION HISTORY
 ----------------
 
-1.3		- Updated tagcloud.swf to that provided with WP-Cumulus 1.20, which includes the following relevant fixes:
+1.4	- Tidied up code a bit better and minimised swfobject.js
+        - Made compatible with Habari SVN code (aka 0.7 when it's released)
+1.3	- Updated tagcloud.swf to that provided with WP-Cumulus 1.20, which includes the following relevant fixes:
 			"Fixed the mouse pointer not changing to a hand when hovering tags."
 			"Adds Turkish language support to the Flash movie."
 	    - Like the WP-Cumulus plugin, I've also added a "Compatibility" option.  When this is enabled, the plugin will not use the SWFObject Javascript to embed the Flash.
