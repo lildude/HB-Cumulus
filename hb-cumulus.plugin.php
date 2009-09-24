@@ -35,27 +35,6 @@ class HbCumulus extends Plugin
     const OPTNAME = 'hb-cumulus__options';
 
     /**
-     * Plugin information
-     *
-     * @access public
-     * @return void
-     */
-    public function info()
-    {
-	return array (
-	    'name' => 'HB-Cumulus',
-	    'url' => 'http://www.lildude.co.uk/projects/hb-cumulus',
-	    'author' => 'Colin Seymour',
-	    'authorurl' => 'http://colinseymour.co.uk/',
-	    'version' => $this->version,
-	    'description' => 'Flash based Tag Cloud for Habari.',
-	    'license' => 'Apache License 2.0',
-	    'guid' => 'F7A0CCFC-C5DF-11DD-A399-37B955D89593',
-	    'copyright' => date( '%Y' )
-	);
-    }
-
-    /**
      * The help message - it provides a larger explanation of what this plugin
      * does
      *
