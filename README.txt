@@ -1,6 +1,6 @@
 Plugin: HB-Cumulus 1.4
 URL: http://www.lildude.co.uk/projects/hb-cumulus
-Plugin Author: Colin Seymour - http://www.colinseymour.co.uk
+Plugin Author: Colin Seymour - http://colinseymour.co.uk
 Credit goes to: Roy Tanck for the original WP-Cumulus plugin and Geoff Stearns for SWFObject as used by Roy's work.
 Licenses:  HB-Cumulus (hb-cumuls.plugin.php) : Apache Software License 2.0
            TagCloud (tagcloud.swf): GNU Public License v3

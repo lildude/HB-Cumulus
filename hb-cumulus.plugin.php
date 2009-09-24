@@ -23,7 +23,7 @@
  * 
  * @package HbCumulus
  * @version 1.4
- * @author Colin Seymour - http://www.colinseymour.co.uk
+ * @author Colin Seymour - http://colinseymour.co.uk
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache License 2.0 (unless otherwise stated)
  * @link http://www.lildude.co.uk/projects/hb-cumulus
  */
