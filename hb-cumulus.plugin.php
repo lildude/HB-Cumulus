@@ -22,7 +22,7 @@
  * HB-Cumulus is a port of the very popular Wordpress version (WP-Cumulus) written by Roy Tanck.
  * 
  * @package HbCumulus
- * @version 1.4
+ * @version 1.4r75
  * @author Colin Seymour - http://colinseymour.co.uk
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache License 2.0 (unless otherwise stated)
  * @link http://www.lildude.co.uk/projects/hb-cumulus
@@ -31,7 +31,7 @@
 class HbCumulus extends Plugin
 {
     private $options = array();
-    private $version = '1.4';
+    private $version = '1.4r75';
     const OPTNAME = 'hb-cumulus__options';
 
     /**
@@ -197,7 +197,7 @@ class HbCumulus extends Plugin
 			$ui->options_compat->helptext = _t( 'Enabling this option switches the plugin to a different way of embedding Flash into the page. Use this if your page has markup errors or if you\'re having trouble getting HB-Cumulus to display correctly.' );
 		    $ui->append( 'submit', 'submit', _t( 'Save Options' ) );
 		$ui->on_success ( array( $this, 'storeOpts' ) );
-		$ui->set_option( 'success_message', _t( 'Options successfully saved.' ) );
+		//$ui->set_option( 'success_message', _t( 'Options successfully saved.' ) );
 		$form_output = $ui->get();
 		echo '<div style="width: 300px; float: right; margin: 10px 25px;"><label>'._t( 'Preview' ).'</label>'.$this->get_flashcode( 'config', TRUE ).'</div>';
 		echo $form_output;
@@ -223,6 +223,7 @@ class HbCumulus extends Plugin
             $newOptions[$name] = $option->value;
         }
         Options::set( self::OPTNAME, $newOptions );
+		Session::notice(_t( 'Options successfully saved.' ) );
      }
 
     /**
