@@ -342,7 +342,7 @@ class HbCumulus extends Plugin
 	    $flashtag .= '" />';
 	    $flashtag .= '<div id="hbcumulus'.$class.'"><p style="display:none;">';
 	    $flashtag .= urldecode($tagcloud);
-	    $flashtag .= '</p><p>HB Cumulus Flash tag cloud by <a href="http://www.colinseymour.co.uk">Colin Seymour</a> requires Flash Player 9 or better.</p></div>';
+	    $flashtag .= '</p><p>HB Cumulus Flash tag cloud by <a href="http://colinseymour.co.uk">Colin Seymour</a> requires Flash Player 9 or better.</p></div>';
 	    $flashtag .= '</object>';
 	} else {
 	    // write flash tag
@@ -350,7 +350,7 @@ class HbCumulus extends Plugin
 	    $flashtag .= '<script type="text/javascript" src="'.$path.'/lib/swfobject-min.js"></script>';
 	    $flashtag .= '<div id="hbcumulus'.$class.'"><p style="display:none;">';
 	    $flashtag .= urldecode($tagcloud);
-	    $flashtag .= '</p><p>HB Cumulus Flash tag cloud by <a href="http://www.colinseymour.co.uk">Colin Seymour</a> requires Flash Player 9 or better.</p></div>';
+	    $flashtag .= '</p><p>HB Cumulus Flash tag cloud by <a href="http://colinseymour.co.uk">Colin Seymour</a> requires Flash Player 9 or better.</p></div>';
 	    $flashtag .= '<script type="text/javascript">';
 	    $flashtag .= 'var rnumber = Math.floor(Math.random()*9999999);'; // force loading of movie to fix IE weirdness
 	    $flashtag .= 'var so = new SWFObject("'.$movie.'?r="+rnumber, "tagcloudflash", "'.$this->options['width'].'", "'.$this->options['height'].'", "9", "#'.$this->options['bgcolor'].'");';
