@@ -514,7 +514,7 @@ class HbCumulus extends Plugin
 	    sort( $results );
 	    foreach ( $results as $tag ) {
 		$style_str = '';
-                $style_str = 'style="font-size: ' . self::get_font_size_for_weight( $tag->relative_weight ) . ';"';
+                $style_str = 'style="font-size:' . self::get_font_size_for_weight( $tag->relative_weight ) . ';"';
                 $tag_cloud.= '<a ' . $style_str . ' href="' . URL::get( 'display_entries_by_tag', array ( 'tag' => $tag->tag_slug ), false ) . '" rel="tag" title="' . $tag->tag_text . " ({$tag->cnt})" . '">'. $tag->tag_text . '</a>';
                 $tag_cloud.= "\n";
             }
