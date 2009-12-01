@@ -390,7 +390,7 @@ class HbCumulus extends Plugin
 	    foreach ( $tags as $tag ) {
 		$hide_tag_list.= ( $hide_tag_list == '' ? "'{$tag}'" : ", '{$tag}'" );
 	    }
-	    $hide_tag_list = "AND t.tag_slug NOT IN ( {$hide_tag_list} )";
+	    $hide_tag_list = "AND t.term NOT IN ( {$hide_tag_list} )";
 	    return $hide_tag_list;
 	}
 	else {
@@ -430,12 +430,12 @@ class HbCumulus extends Plugin
 	$hide_tags = self::get_hide_tag_list();
 
 	$sql = "
-		SELECT COUNT(t2p.post_id) AS cnt
-		FROM {tag2post} t2p
+		SELECT COUNT(t2p.object_id) AS cnt
+		FROM {object_terms} t2p
 		INNER JOIN {posts} p
-		ON t2p.post_id = p.id
-		INNER JOIN {tags} t
-		ON t2p.tag_id = t.id
+		ON t2p.object_id = p.id
+		INNER JOIN {terms} t
+		ON t2p.term_id = t.id
 		WHERE p.content_type = {$post_type}
 		AND p.status = {$post_status}
 		{$hide_tags}";
@@ -456,12 +456,12 @@ class HbCumulus extends Plugin
 	$hide_tags = self::get_hide_tag_list();
 
 	$sql = "
-		SELECT COUNT(t2p.post_id) AS cnt
+		SELECT COUNT(t2p.object_id) AS cnt
 		FROM {posts} p
-		INNER JOIN {tag2post} t2p
-		ON p.id = t2p.post_id
-		INNER JOIN {tags} t
-		ON t2p.tag_id = t.id
+		INNER JOIN {object_terms} t2p
+		ON p.id = t2p.object_id
+		INNER JOIN {terms} t
+		ON t2p.term_id = t.id
 		WHERE p.content_type = {$post_type}
 		AND p.status = {$post_status}
 		{$hide_tags}
@@ -493,19 +493,19 @@ class HbCumulus extends Plugin
 	$most_popular_tag_cnt = self::get_most_popular_tag_count();
 
 	$sql = "
-		SELECT t.tag_text AS tag_text, t.tag_slug AS tag_slug, t.id AS id,
-			COUNT(t2p.post_id) AS cnt,
-			COUNT(t2p.post_id) * 100 / {$total_tag_cnt} AS weight,
-			COUNT(t2p.post_id) * 100 / {$most_popular_tag_cnt} AS relative_weight
+		SELECT t.term_display AS tag_text, t.term AS tag_slug, t.id AS id,
+			COUNT(t2p.object_id) AS cnt,
+			COUNT(t2p.object_id) * 100 / {$total_tag_cnt} AS weight,
+			COUNT(t2p.object_id) * 100 / {$most_popular_tag_cnt} AS relative_weight
 		FROM {posts} p
-		INNER JOIN {tag2post} t2p
-		ON p.id = t2p.post_id
-		INNER JOIN {tags} t
-		ON t2p.tag_id = t.id
+		INNER JOIN {object_terms} t2p
+		ON p.id = t2p.object_id
+		INNER JOIN {terms} t
+		ON t2p.term_id = t.id
 		WHERE p.content_type = {$post_type}
 		AND p.status = {$post_status}
 		{$hide_tags}
-		GROUP BY t.tag_text, t.tag_slug, t.id
+		GROUP BY t.term_display, t.term, t.id
 		ORDER BY weight DESC
 		{$limit}";
 	$results = DB::get_results( $sql );
