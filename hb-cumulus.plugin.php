@@ -22,7 +22,7 @@
  * HB-Cumulus is a port of the very popular Wordpress version (WP-Cumulus) written by Roy Tanck.
  * 
  * @package HbCumulus
- * @version 1.4r75
+ * @version 1.5
  * @author Colin Seymour - http://colinseymour.co.uk
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache License 2.0 (unless otherwise stated)
  * @link http://www.lildude.co.uk/projects/hb-cumulus
@@ -31,7 +31,7 @@
 class HbCumulus extends Plugin
 {
     private $options = array();
-    private $version = '1.4r75';
+    private $version = '1.5';
     const OPTNAME = 'hb-cumulus__options';
 
     /**
@@ -194,10 +194,9 @@ class HbCumulus extends Plugin
 			$ui->options_distr->value = $this->options['distr'];
 		    $ui->append( 'checkbox', 'options_compat', 'null:null', _t( 'Compatibility Mode' ), 'optionscontrol_checkbox' );
 			$ui->options_compat->value = $this->options['compat'];
-			$ui->options_compat->helptext = _t( 'Enabling this option switches the plugin to a different way of embedding Flash into the page. Use this if your page has markup errors or if you\'re having trouble getting HB-Cumulus to display correctly.' );
+			$ui->options_compat->helptext = _t( 'Enabling this option switches to using a method of embedding Flash into the page that does not use Javascript. Use this if your page has markup errors or if you\'re having trouble getting HB-Cumulus to display correctly, or you just don\'t to load another Javascript file.' );
 		    $ui->append( 'submit', 'submit', _t( 'Save Options' ) );
 		$ui->on_success ( array( $this, 'storeOpts' ) );
-		//$ui->set_option( 'success_message', _t( 'Options successfully saved.' ) );
 		$form_output = $ui->get();
 		echo '<div style="width: 300px; float: right; margin: 10px 25px;"><label>'._t( 'Preview' ).'</label>'.$this->get_flashcode( 'config', TRUE ).'</div>';
 		echo $form_output;
@@ -271,19 +270,53 @@ class HbCumulus extends Plugin
         if ( Controller::get_var( 'configure' ) == $this->plugin_id ) {
             $output = '<style type="text/css">';
             if ( Version::HABARI_VERSION == '0.5.2' ) {
-                $output .= 'form#hbcumulus .formcontrol { line-height:24px; height:30px; }';
-                $output .= 'form#hbcumulus #save input { float:none; }';
-                $output .= 'form#hbcumulus p.error {background:none !important; border:none !important; margin-bottom:0 !important; padding:0 !important;}';
+                $output .= 'form#hbcumulus .formcontrol {line-height:24px; height:30px}';
+                $output .= 'form#hbcumulus #save input {float:none}';
+                $output .= 'form#hbcumulus p.error {background:none !important; border:none !important; margin-bottom:0 !important; padding:0 !important}';
             }
 	    else {
-                $output .= 'form#hbcumulus .formcontrol { line-height:24px; height:18px; }';
+                $output .= 'form#hbcumulus .formcontrol {line-height:24px; height:18px}';
+                $output .= 'form#hbcumulus .helptext {line-height: 13px; padding-left: 20px}';
+                $output .= 'form#hbcumulus #submit { clear: both}';
             }
-        $output .= 'form#hbcumulus span.pct25 select { width:85%; }';
-        $output .= 'form#hbcumulus span.pct25 { text-align:right; }';
-        $output .= 'form#hbcumulus span.pct5 input { margin-left:25px; }';
-        $output .= 'form#hbcumulus p.error { float:left; color:#A00; }';
-        $output .= '</style>';
-        echo $output;
+            $output .= 'form#hbcumulus span.pct25 select {width:85%}';
+            $output .= 'form#hbcumulus span.pct25 {text-align:right}';
+            $output .= 'form#hbcumulus span.pct5 input {margin-left:25px}';
+            $output .= 'form#hbcumulus p.error {float:left; color:#A00}';
+            $output .= '</style>';
+            echo $output;
+        }
+    }
+
+    /**
+     * Add swfobject-min.js to the header on plugin's configure page.
+     *
+     * @access public
+     * @param object $theme
+     * @return void
+     */
+    public function action_admin_header( $theme )
+    {
+        if ( Controller::get_var( 'configure' ) == $this->plugin_id ) {
+            Stack::add( 'admin_header_javascript',  URL::get_from_filesystem( __FILE__ ) . '/lib/swfobject-min.js', 'swfobject' );
+        }
+    }
+
+    /**
+     * Add swfobject-min.js to the page header.
+     *
+     * This allows the Javascript to be manipulated along with all the other files
+     * added via Stack::add() in things like plugins.
+     *
+     * @access public
+     * @param object $theme
+     * @return void
+     */
+    public function theme_header( $theme )
+    {
+        $this->options = Options::get( self::OPTNAME );
+        if ( ! $this->options['compat'] ) {
+            Stack::add( 'template_header_javascript',  URL::get_from_filesystem( __FILE__ ) . '/lib/swfobject-min.js', 'swfobject' );
         }
     }
 
@@ -340,17 +373,16 @@ class HbCumulus extends Plugin
 	    }
 
 	    $flashtag .= '" />';
-	    $flashtag .= '<div id="hbcumulus'.$class.'"><p style="display:none;">';
+	    $flashtag .= '<div id="hbcumulus'.$class.'"><p>';
 	    $flashtag .= urldecode($tagcloud);
-	    $flashtag .= '</p><p>HB Cumulus Flash tag cloud by <a href="http://colinseymour.co.uk">Colin Seymour</a> requires Flash Player 9 or better.</p></div>';
+	    $flashtag .= '</p></div>';
 	    $flashtag .= '</object>';
 	} else {
 	    // write flash tag
 	    $flashtag .= '<!-- SWFObject embed by Geoff Stearns geoff@deconcept.com http://blog.deconcept.com/swfobject/ -->';
-	    $flashtag .= '<script type="text/javascript" src="'.$path.'/lib/swfobject-min.js"></script>';
-	    $flashtag .= '<div id="hbcumulus'.$class.'"><p style="display:none;">';
+	    $flashtag .= '<div id="hbcumulus'.$class.'"><p">';
 	    $flashtag .= urldecode($tagcloud);
-	    $flashtag .= '</p><p>HB Cumulus Flash tag cloud by <a href="http://colinseymour.co.uk">Colin Seymour</a> requires Flash Player 9 or better.</p></div>';
+	    $flashtag .= '</p></div>';
 	    $flashtag .= '<script type="text/javascript">';
 	    // $flashtag .= 'var rnumber = Math.floor(Math.random()*9999999);'; // force loading of movie to fix IE weirdness // CNS: removing rev to speed things up
 	    //$flashtag .= 'var so = new SWFObject("'.$movie.'?r="+rnumber, "tagcloudflash", "'.$this->options['width'].'", "'.$this->options['height'].'", "9", "#'.$this->options['bgcolor'].'");';
@@ -417,63 +449,7 @@ class HbCumulus extends Plugin
         return intval( $fontsize ) . "pt";
     }
 
-    /**
-     * Return integer for total usage for tag
-     *
-     * @access private
-     * @return int
-     */
-    private function get_total_tag_usage_count()
-    {
-	$post_type = Post::type( 'entry' );
-	$post_status = Post::status( 'published' );
-	$hide_tags = self::get_hide_tag_list();
-
-	$sql = "
-		SELECT COUNT(t2p.object_id) AS cnt
-		FROM {object_terms} t2p
-		INNER JOIN {posts} p
-		ON t2p.object_id = p.id
-		INNER JOIN {terms} t
-		ON t2p.term_id = t.id
-		WHERE p.content_type = {$post_type}
-		AND p.status = {$post_status}
-		{$hide_tags}";
-	$result = DB::get_row( $sql );
-	return ( !empty( $result ) ? $result->cnt : 0 );
-    }
-
-    /**
-     * Get most popular tag count.
-     *
-     * @access private
-     * @return int
-     */
-    private function get_most_popular_tag_count()
-    {
-	$post_type = Post::type( 'entry' );
-	$post_status = Post::status( 'published' );
-	$hide_tags = self::get_hide_tag_list();
-
-	$sql = "
-		SELECT COUNT(t2p.object_id) AS cnt
-		FROM {posts} p
-		INNER JOIN {object_terms} t2p
-		ON p.id = t2p.object_id
-		INNER JOIN {terms} t
-		ON t2p.term_id = t.id
-		WHERE p.content_type = {$post_type}
-		AND p.status = {$post_status}
-		{$hide_tags}
-		GROUP BY t.id
-		ORDER BY cnt DESC
-		LIMIT 1";
-	$result = DB::get_row( $sql );
-
-	return ( !empty( $result ) ? $result->cnt : 0 );
-    }
-
-    /**
+   /**
      * Return the string list of tags used to form the cloud
      *
      * @access private
@@ -489,10 +465,9 @@ class HbCumulus extends Plugin
 	$limit = ( empty( $num_tag ) ) ? '' : "LIMIT {$num_tag}";
 
 	$hide_tags = self::get_hide_tag_list();
-	//$total_tag_cnt = self::get_total_tag_usage_count();
 	$total_tag_cnt = Tags::count_total();
-	//$most_popular_tag_cnt = self::get_most_popular_tag_count();
-	$most_popular_tag_count = Tags::max_count();
+	$most_popular_tag_cnt = Tags::max_count();
+        $vocab_id = Tags::vocabulary()->id;
 
 	$sql = "
 		SELECT t.term_display AS tag_text, t.term AS tag_slug, t.id AS id,
@@ -506,6 +481,7 @@ class HbCumulus extends Plugin
 		ON t2p.term_id = t.id
 		WHERE p.content_type = {$post_type}
 		AND p.status = {$post_status}
+                AND t.vocabulary_id = {$vocab_id}
 		{$hide_tags}
 		GROUP BY t.term_display, t.term, t.id
 		ORDER BY weight DESC

@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!-- This is the new format for Habari r3624 or later (and will be for 0.7) Order MAY be important. Time will tell -->
 <pluggable type="plugin" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://schemas.habariproject.org/Pluggable-1.3.xsd">
     <name>HB-Cumulus</name>
     <license url="http://www.apache.org/licenses/LICENSE-2.0.html">Apache Software License 2.0</license>
 	<author url="http://colinseymour.co.uk">Colin Seymour</author>
 	<copyright>Copyright 2009</copyright>
-	<version>1.4</version>
+	<version>1.5</version>
     <url>http://www.lildude.co.uk/projects/hb-cumulus</url>
 	<downloadurl>http://www.lildude.co.uk/projects/hb-audio-player</downloadurl>
     <description><![CDATA[Flash based Tag Cloud for Habari.]]></description>
