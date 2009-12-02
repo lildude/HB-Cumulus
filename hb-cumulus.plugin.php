@@ -489,8 +489,10 @@ class HbCumulus extends Plugin
 	$limit = ( empty( $num_tag ) ) ? '' : "LIMIT {$num_tag}";
 
 	$hide_tags = self::get_hide_tag_list();
-	$total_tag_cnt = self::get_total_tag_usage_count();
-	$most_popular_tag_cnt = self::get_most_popular_tag_count();
+	//$total_tag_cnt = self::get_total_tag_usage_count();
+	$total_tag_cnt = Tags::count_total();
+	//$most_popular_tag_cnt = self::get_most_popular_tag_count();
+	$most_popular_tag_count = Tags::max_count();
 
 	$sql = "
 		SELECT t.term_display AS tag_text, t.term AS tag_slug, t.id AS id,
