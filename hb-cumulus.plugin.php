@@ -362,14 +362,14 @@ class HbCumulus extends Plugin
 	    }
 	    $flashtag .= '<param name="flashvars" value="';
 	    $flashtag .= 'tcolor=0x' . $this->options['tcolor'];
-	    $flashtag .= '&tcolor2=0x' . ($this->options['tcolor2'] == "" ? $this->options['tcolor'] : $this->options['tcolor2']);
-	    $flashtag .= '&hicolor=0x' . ($this->options['hicolor'] == "" ? $this->options['tcolor'] : $this->options['hicolor']);
-	    $flashtag .= '&tspeed='.$this->options['speed'];
-	    $flashtag .= '&distr='.$this->options['distr'];
-	    $flashtag .= '&mode='.$this->options['mode'];
+	    $flashtag .= '&amp;tcolor2=0x' . ($this->options['tcolor2'] == "" ? $this->options['tcolor'] : $this->options['tcolor2']);
+	    $flashtag .= '&amp;hicolor=0x' . ($this->options['hicolor'] == "" ? $this->options['tcolor'] : $this->options['hicolor']);
+	    $flashtag .= '&amp;tspeed='.$this->options['speed'];
+	    $flashtag .= '&amp;distr='.$this->options['distr'];
+	    $flashtag .= '&amp;mode='.$this->options['mode'];
 	    // put tags in flashvar
 	    if( $this->options['mode'] != "cats" ){
-		$flashtag .= '&tagcloud='.urlencode('<tags>') . $tagcloud . urlencode('</tags>');
+		$flashtag .= '&amp;tagcloud='.urlencode('<tags>') . $tagcloud . urlencode('</tags>');
 	    }
 
 	    $flashtag .= '" />';
