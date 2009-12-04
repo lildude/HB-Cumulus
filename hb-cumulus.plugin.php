@@ -380,7 +380,7 @@ class HbCumulus extends Plugin
 	} else {
 	    // write flash tag
 	    $flashtag .= '<!-- SWFObject embed by Geoff Stearns geoff@deconcept.com http://blog.deconcept.com/swfobject/ -->';
-	    $flashtag .= '<div id="hbcumulus'.$class.'"><p">';
+	    $flashtag .= '<div id="hbcumulus'.$class.'"><p>';
 	    $flashtag .= urldecode($tagcloud);
 	    $flashtag .= '</p></div>';
 	    $flashtag .= '<script type="text/javascript">';
