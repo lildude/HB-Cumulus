@@ -377,9 +377,9 @@ class HbCumulus extends Plugin
 	    }
 
 	    $flashtag .= '" />';
-	    $flashtag .= '<div id="hbcumulus'.$class.'"';
+	    $flashtag .= '<div id="hbcumulus'.$class.'"><p';
 	    if ( ! $this->options['showhtml'] ) {
-		$flashtag .= 'style="display:none;"';
+		$flashtag .= ' style="display:none;"';
 	    }
 	    $flashtag .= '>';
 	    $flashtag .= urldecode($tagcloud);
@@ -387,13 +387,13 @@ class HbCumulus extends Plugin
 	    $flashtag .= '</object>';
 	} else {
 	    // write flash tag
-	    $flashtag .= '<div id="hbcumulus'.$class.'"';
+	    $flashtag .= '<div id="hbcumulus'.$class.'"><p';
 	    if ( ! $this->options['showhtml'] ) {
-		$flashtag .= 'style="display:none;"';
+		$flashtag .= ' style="display:none;"';
 	    }
 	    $flashtag .= '>';
 	    $flashtag .= urldecode($tagcloud);
-	    $flashtag .= '</div>';
+	    $flashtag .= '</p></div>';
 	    $flashtag .= '<script type="text/javascript">';
 	    $flashtag .= 'var so = new SWFObject("'.$movie.'", "tagcloudflash", "'.$this->options['width'].'", "'.$this->options['height'].'", "9", "#'.$this->options['bgcolor'].'");';
 	    if( $this->options['trans'] == 'true' ){
