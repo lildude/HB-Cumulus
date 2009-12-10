@@ -373,15 +373,15 @@ class HbCumulus extends Plugin
 	    }
 
 	    $flashtag .= '" />';
-	    $flashtag .= '<div id="hbcumulus'.$class.'"><p>';
+	    $flashtag .= '<div id="hbcumulus'.$class.'">';
 	    $flashtag .= urldecode($tagcloud);
-	    $flashtag .= '</p></div>';
+	    $flashtag .= '</div>';
 	    $flashtag .= '</object>';
 	} else {
 	    // write flash tag
-	    $flashtag .= '<div id="hbcumulus'.$class.'"><p>';
+	    $flashtag .= '<div id="hbcumulus'.$class.'">';
 	    $flashtag .= urldecode($tagcloud);
-	    $flashtag .= '</p></div>';
+	    $flashtag .= '</div>';
 	    $flashtag .= '<script type="text/javascript">';
 	    $flashtag .= 'var so = new SWFObject("'.$movie.'", "tagcloudflash", "'.$this->options['width'].'", "'.$this->options['height'].'", "9", "#'.$this->options['bgcolor'].'");';
 	    if( $this->options['trans'] == 'true' ){
