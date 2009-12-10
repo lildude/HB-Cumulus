@@ -97,7 +97,8 @@ class HbCumulus extends Plugin
                 'minfont' => '8',
                 'maxfont' => '25',
                 'number' => '30',
-		'compat' => FALSE
+		'compat' => FALSE,
+		'showhtml' => TRUE,
             );
 
             $this->options = Options::get( self::OPTNAME );
@@ -192,6 +193,9 @@ class HbCumulus extends Plugin
 			$ui->options_trans->value = $this->options['trans'];
 		    $ui->append( 'checkbox', 'options_distr', 'null:null', _t( 'Distribute Tags Evenly' ), 'optionscontrol_checkbox' );
 			$ui->options_distr->value = $this->options['distr'];
+		    $ui->append( 'checkbox', 'options_showhtml', 'null:null', _t( 'Show HTML Tag Cloud' ), 'optionscontrol_checkbox' );
+			$ui->options_showhtml->value = $this->options['showhtml'];
+			$ui->options_showhtml->helptext = _t( 'Display HTML tag cloud in the event the Flash cloud can\'t be.  <b>Warning:</b> due to the way autop() currently works, this may not work as desired when displaying HB Cumulus in a post or page.' );
 		    $ui->append( 'checkbox', 'options_compat', 'null:null', _t( 'Compatibility Mode' ), 'optionscontrol_checkbox' );
 			$ui->options_compat->value = $this->options['compat'];
 			$ui->options_compat->helptext = _t( 'Enabling this option switches to using a method of embedding Flash into the page that does not use Javascript. Use this if your page has markup errors or if you\'re having trouble getting HB-Cumulus to display correctly, or you just don\'t to load another Javascript file.' );
@@ -373,13 +377,21 @@ class HbCumulus extends Plugin
 	    }
 
 	    $flashtag .= '" />';
-	    $flashtag .= '<div id="hbcumulus'.$class.'">';
+	    $flashtag .= '<div id="hbcumulus'.$class.'"';
+	    if ( ! $this->options['showhtml'] ) {
+		$flashtag .= 'style="display:none;"';
+	    }
+	    $flashtag .= '>';
 	    $flashtag .= urldecode($tagcloud);
 	    $flashtag .= '</div>';
 	    $flashtag .= '</object>';
 	} else {
 	    // write flash tag
-	    $flashtag .= '<div id="hbcumulus'.$class.'">';
+	    $flashtag .= '<div id="hbcumulus'.$class.'"';
+	    if ( ! $this->options['showhtml'] ) {
+		$flashtag .= 'style="display:none;"';
+	    }
+	    $flashtag .= '>';
 	    $flashtag .= urldecode($tagcloud);
 	    $flashtag .= '</div>';
 	    $flashtag .= '<script type="text/javascript">';
@@ -492,7 +504,6 @@ class HbCumulus extends Plugin
 		$style_str = '';
                 $style_str = 'style="font-size:' . self::get_font_size_for_weight( $tag->relative_weight ) . ';"';
                 $tag_cloud.= '<a ' . $style_str . ' href="' . URL::get( 'display_entries_by_tag', array ( 'tag' => $tag->tag_slug ), false ) . '" rel="tag" title="' . $tag->tag_text . ' (' . $tag->cnt . ')' . '">' . $tag->tag_text . '</a>';
-                //$tag_cloud.= "\n";
             }
         }
 	return $tag_cloud;
