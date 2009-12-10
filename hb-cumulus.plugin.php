@@ -202,7 +202,7 @@ class HbCumulus extends Plugin
 		    $ui->append( 'submit', 'submit', _t( 'Save Options' ) );
 		$ui->on_success ( array( $this, 'storeOpts' ) );
 		$form_output = $ui->get();
-		echo '<div style="width: 300px; float: right; margin: 10px 25px;"><label>'._t( 'Preview' ).'</label>'.$this->get_flashcode( 'config', TRUE ).'</div>';
+		echo '<div style="width: 300px; float: right; margin: 10px 25px;"><label style="display:block">'._t( 'Preview' ).'</label>'.$this->get_flashcode( 'config', TRUE ).'</div>';
 		echo $form_output;
 		break;
             }
