@@ -356,9 +356,9 @@ class HbCumulus extends Plugin
 	    $flashtag = '<object type="application/x-shockwave-flash" data="'.$movie.'" width="'.$this->options['width'].'" height="'.$this->options['height'].'">';
 	    $flashtag .= '<param name="movie" value="'.$movie.'" />';
 	    $flashtag .= '<param name="bgcolor" value="#'.$this->options['bgcolor'].'" />';
-	    $flashtag .= '<param name="AllowScriptAccess" value="always">';
+	    $flashtag .= '<param name="AllowScriptAccess" value="always" />';
 	    if( $this->options['trans'] == 'true' ){
-		$flashtag .= '<param name="wmode" value="transparent">';
+		$flashtag .= '<param name="wmode" value="transparent" />';
 	    }
 	    $flashtag .= '<param name="flashvars" value="';
 	    $flashtag .= 'tcolor=0x' . $this->options['tcolor'];
@@ -379,13 +379,10 @@ class HbCumulus extends Plugin
 	    $flashtag .= '</object>';
 	} else {
 	    // write flash tag
-	    $flashtag .= '<!-- SWFObject embed by Geoff Stearns geoff@deconcept.com http://blog.deconcept.com/swfobject/ -->';
 	    $flashtag .= '<div id="hbcumulus'.$class.'"><p>';
 	    $flashtag .= urldecode($tagcloud);
 	    $flashtag .= '</p></div>';
 	    $flashtag .= '<script type="text/javascript">';
-	    // $flashtag .= 'var rnumber = Math.floor(Math.random()*9999999);'; // force loading of movie to fix IE weirdness // CNS: removing rev to speed things up
-	    //$flashtag .= 'var so = new SWFObject("'.$movie.'?r="+rnumber, "tagcloudflash", "'.$this->options['width'].'", "'.$this->options['height'].'", "9", "#'.$this->options['bgcolor'].'");';
 	    $flashtag .= 'var so = new SWFObject("'.$movie.'", "tagcloudflash", "'.$this->options['width'].'", "'.$this->options['height'].'", "9", "#'.$this->options['bgcolor'].'");';
 	    if( $this->options['trans'] == 'true' ){
 		$flashtag .= 'so.addParam("wmode", "transparent");';
@@ -494,8 +491,8 @@ class HbCumulus extends Plugin
 	    foreach ( $results as $tag ) {
 		$style_str = '';
                 $style_str = 'style="font-size:' . self::get_font_size_for_weight( $tag->relative_weight ) . ';"';
-                $tag_cloud.= '<a ' . $style_str . ' href="' . URL::get( 'display_entries_by_tag', array ( 'tag' => $tag->tag_slug ), false ) . '" rel="tag" title="' . $tag->tag_text . " ({$tag->cnt})" . '">'. $tag->tag_text . '</a>';
-                $tag_cloud.= "\n";
+                $tag_cloud.= '<a ' . $style_str . ' href="' . URL::get( 'display_entries_by_tag', array ( 'tag' => $tag->tag_slug ), false ) . '" rel="tag" title="' . $tag->tag_text . ' (' . $tag->cnt . ')' . '">' . $tag->tag_text . '</a>';
+                //$tag_cloud.= "\n";
             }
         }
 	return $tag_cloud;
