@@ -301,7 +301,7 @@ class HbCumulus extends Plugin
     public function action_admin_header( $theme )
     {
         if ( Controller::get_var( 'configure' ) == $this->plugin_id ) {
-            Stack::add( 'admin_header_javascript',  URL::get_from_filesystem( __FILE__ ) . '/lib/swfobject-min.js', 'swfobject' );
+	    Stack::add( 'admin_header_javascript',  URL::get_from_filesystem( __FILE__ ) . '/lib/swfobject-min.js', 'swfobject' );
         }
     }
 
@@ -334,7 +334,6 @@ class HbCumulus extends Plugin
     private function get_flashcode( $class = '', $config = FALSE )
     {
         $this->options = Options::get( self::OPTNAME );
-        $class = ( $class != '' ) ? "_$class" : '';
         $flashtag = '';
         if ( $config ) {
             if ( $this->options['width'] < 300 && $this->options['height'] < 300 ) {
@@ -353,14 +352,14 @@ class HbCumulus extends Plugin
         echo self::build_tag_cloud( $this->options['number'] );
         $tagcloud = urlencode( str_replace( "&nbsp;", " ", ob_get_clean() ) );
         $movie =  $this->get_url() .'/lib/tagcloud.swf';
-        $path =  $this->get_url();
 	if ( $this->options['compat'] ) {
 	    // Non-JS method
-	    $flashtag = '<object type="application/x-shockwave-flash" data="'.$movie.'" width="'.$this->options['width'].'" height="'.$this->options['height'].'">';
+	    $flashtag = '<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="'.$this->options['width'].'" height="'.$this->options['height'].'">';
 	    $flashtag .= '<param name="movie" value="'.$movie.'" />';
+	    $flashtag .= '<object type="application/x-shockwave-flash" data="'.$movie.'" width="'.$this->options['width'].'" height="'.$this->options['height'].'">';
 	    $flashtag .= '<param name="bgcolor" value="#'.$this->options['bgcolor'].'" />';
 	    $flashtag .= '<param name="AllowScriptAccess" value="always" />';
-	    if( $this->options['trans'] == 'true' ){
+	    if( $this->options['trans'] ){
 		$flashtag .= '<param name="wmode" value="transparent" />';
 	    }
 	    $flashtag .= '<param name="flashvars" value="';
@@ -376,41 +375,47 @@ class HbCumulus extends Plugin
 	    }
 
 	    $flashtag .= '" />';
-	    $flashtag .= '<div id="hbcumulus'.$class.'"><p';
+	    $flashtag .= '<div id="hbcumulus_'.$class.'"';
 	    if ( ! $this->options['showhtml'] ) {
 		$flashtag .= ' style="display:none;"';
 	    }
-	    $flashtag .= '>';
-	    $flashtag .= urldecode($tagcloud);
-	    $flashtag .= '</div>';
-	    $flashtag .= '</object>';
+	    $flashtag .= '>'. urldecode($tagcloud);
+	    $flashtag .= '</div></object></object>';
 	} else {
-	    // write flash tag
-	    $flashtag .= '<div id="hbcumulus'.$class.'"><p';
+	    // Using swfobject "dynamic" method
+	    //
+	    // Construct the Javascript
+	    $flashVars = 'tcolor:"0x'.$this->options['tcolor'].'"';
+	    $flashVars .= ',tcolor2:"0x' . ($this->options['tcolor2'] == "" ? $this->options['tcolor'] : $this->options['tcolor2']) . '"';
+	    $flashVars .= ',hicolor:"0x' . ($this->options['hicolor'] == "" ? $this->options['tcolor'] : $this->options['hicolor']) . '"';
+	    $flashVars .= ',tspeed:"'.$this->options['speed'].'"';
+	    $flashVars .= ',distr:"'.$this->options['distr'].'"';
+	    $flashVars .= ',mode:"'.$this->options['mode'].'"';
+
+	    if( $this->options['mode'] != "cats" ){
+		$flashVars .= ',tagcloud:"'.urlencode('<tags>') . $tagcloud . urlencode('</tags>').'"';
+	    }
+
+	    $params = 'menu:false,bgcolor:"'.$this->options['bgcolor'].'",allowScriptAccess:"always"';
+	    if( $this->options['trans'] ){
+		$params .= ',wmode:"transparent"';
+	    }
+
+	    $attributes = '';
+	    // We only embed the Javascript into the body of the doc so we can support both the $theme->hb-cumulus() AND <!-- hb-cumulus --> methods of embedding
+	    $flashtag .= '<script type="text/javascript">';
+	    $flashtag .= 'swfobject.embedSWF("'.$movie.'", "hbcumulus_'.$class.'", "'.$this->options['width'].'", "'.$this->options['height'].'", "9.0.0", false, {'.$flashVars.'}, {'.$params.'}, {'.$attributes.'})';
+	    $flashtag .= '</script>';
+
+
+	    $flashtag .= '<div id="hbcumulus_'.$class.'"';
 	    if ( ! $this->options['showhtml'] ) {
 		$flashtag .= ' style="display:none;"';
 	    }
-	    $flashtag .= '>';
-	    $flashtag .= urldecode($tagcloud);
-	    $flashtag .= '</p></div>';
-	    $flashtag .= '<script type="text/javascript">';
-	    $flashtag .= 'var so = new SWFObject("'.$movie.'", "tagcloudflash", "'.$this->options['width'].'", "'.$this->options['height'].'", "9", "#'.$this->options['bgcolor'].'");';
-	    if( $this->options['trans'] == 'true' ){
-		$flashtag .= 'so.addParam("wmode", "transparent");';
-	    }
-	    $flashtag .= 'so.addParam("allowScriptAccess", "always");';
-	    $flashtag .= 'so.addVariable("tcolor", "0x'.$this->options['tcolor'].'");';
-	    $flashtag .= 'so.addVariable("tcolor2", "0x' . ($this->options['tcolor2'] == "" ? $this->options['tcolor'] : $this->options['tcolor2']) . '");';
-	    $flashtag .= 'so.addVariable("hicolor", "0x' . ($this->options['hicolor'] == "" ? $this->options['tcolor'] : $this->options['hicolor']) . '");';
-	    $flashtag .= 'so.addVariable("tspeed", "'.$this->options['speed'].'");';
-	    $flashtag .= 'so.addVariable("distr", "'.$this->options['distr'].'");';
-	    $flashtag .= 'so.addVariable("mode", "'.$this->options['mode'].'");';
-	    // put tags in flashvar
-	    if( $this->options['mode'] != "cats" ){
-		$flashtag .= 'so.addVariable("tagcloud", "'.urlencode('<tags>') . $tagcloud . urlencode('</tags>').'");';
-	    }
-	    $flashtag .= 'so.write("hbcumulus'.$class.'");';
-	    $flashtag .= '</script>';
+	    $flashtag .= '>'. urldecode($tagcloud);
+	    $flashtag .= '</div>';
+
+
 	}
         return $flashtag;
     }
@@ -506,6 +511,43 @@ class HbCumulus extends Plugin
             }
         }
 	return $tag_cloud;
+    }
+
+    /**
+     * Return the Javascript required for the dynamic swfobject embed method
+     *
+     * @access private
+     * @param string $class
+     * @return string
+     */
+    private function dynamic_js( $class = '' )
+    {
+	// Construct the Javascript
+	$movie =  $this->get_url() .'/lib/tagcloud.swf';
+
+	ob_start();
+	echo self::build_tag_cloud( $this->options['number'] );
+	$tagcloud = urlencode( str_replace( "&nbsp;", " ", ob_get_clean() ) );
+
+	$flashVars = 'tcolor:"0x'.$this->options['tcolor'].'"';
+	$flashVars .= ',tcolor2:"0x' . ($this->options['tcolor2'] == "" ? $this->options['tcolor'] : $this->options['tcolor2']) . '"';
+	$flashVars .= ',hicolor:"0x' . ($this->options['hicolor'] == "" ? $this->options['tcolor'] : $this->options['hicolor']) . '"';
+	$flashVars .= ',tspeed:"'.$this->options['speed'].'"';
+	$flashVars .= ',distr:"'.$this->options['distr'].'"';
+	$flashVars .= ',mode:"'.$this->options['mode'].'"';
+
+	if( $this->options['mode'] != "cats" ){
+	    $flashVars .= ',tagcloud:"'.urlencode('<tags>') . $tagcloud . urlencode('</tags>').'"';
+	}
+
+	$params = 'menu:false,bgcolor:"'.$this->options['bgcolor'].'",allowScriptAccess:"always"';
+	if( $this->options['trans'] == 'true' ){
+	    $params .= ',wmode:"transparent"';
+	}
+
+	$attributes = '';
+
+	return 'swfobject.embedSWF("'.$movie.'", "hbcumulus_'.$class.'", "'.$this->options['width'].'", "'.$this->options['height'].'", "9.0.0", false, {'.$flashVars.'}, {'.$params.'}, {'.$attributes.'})';
     }
 
     /**
