@@ -98,7 +98,7 @@ class HbCumulus extends Plugin
                 'number' => '30',
 		'compat' => FALSE,
 		'showhtml' => TRUE,
-		'gajax' => TRUE,	// This is a "secret" option.  Set this to TRUE if you prefer to use the swfobject.js hosted by Google.
+		'gajax' => FALSE,	// This is a "secret" option.  Set this to TRUE if you prefer to use the swfobject.js hosted by Google.
             );
 
             $this->options = Options::get( self::OPTNAME );
