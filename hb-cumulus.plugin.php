@@ -194,7 +194,7 @@ class HbCumulus extends Plugin
 			$ui->options_distr->value = $this->options['distr'];
 		    $ui->append( 'checkbox', 'options_showhtml', 'null:null', _t( 'Show HTML Tag Cloud' ), 'optionscontrol_checkbox' );
 			$ui->options_showhtml->value = $this->options['showhtml'];
-			$ui->options_showhtml->helptext = _t( 'Display HTML tag cloud in the event the Flash cloud can\'t be.  <b>Warning:</b> due to the way autop() currently works, this may not work as desired when displaying HB Cumulus in a post or page.' );
+			$ui->options_showhtml->helptext = _t( 'Display HTML tag cloud in the event the Flash cloud can\'t be.  <b>Warning:</b> due to the way autop() currently works, you may see the HTML tag when using HB Cumulus in a post or page with compatibility mode enabled.' );
 		    $ui->append( 'checkbox', 'options_compat', 'null:null', _t( 'Compatibility Mode' ), 'optionscontrol_checkbox' );
 			$ui->options_compat->value = $this->options['compat'];
 			$ui->options_compat->helptext = _t( 'Enabling this option switches to using a method of embedding Flash into the page that does not use Javascript. Use this if your page has markup errors or if you\'re having trouble getting HB-Cumulus to display correctly, or you just don\'t to load another Javascript file.' );
