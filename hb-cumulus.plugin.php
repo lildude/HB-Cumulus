@@ -319,7 +319,7 @@ class HbCumulus extends Plugin
     {
         $this->options = Options::get( self::OPTNAME );
         if ( ! $this->options['compat'] ) {
-            Stack::add( 'template_header_javascript',  URL::get_from_filesystem( __FILE__ ) . '/lib/swfobject-min.js', 'swfobject' );
+	    Stack::add( 'template_header_javascript',  URL::get_from_filesystem( __FILE__ ) . '/lib/swfobject-min.js', 'swfobject' );
         }
     }
 
