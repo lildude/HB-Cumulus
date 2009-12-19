@@ -110,6 +110,8 @@ REVISION HISTORY
 1.5	- Updated tagcloud.swf to that provided with WP-Cumulus 1.23
 	- Updated swfobject to version 2.2
 	- Improved HTML validity
+	- Updated code to compatible with new tags related functionality within
+	  Habari SVN code (aka 0.7 when it's released).
 1.4	- Tidied up code a bit better and minimised swfobject.js
         - Made compatible with Habari SVN code (aka 0.7 when it's released)
 1.3	- Updated tagcloud.swf to that provided with WP-Cumulus 1.20, which includes
