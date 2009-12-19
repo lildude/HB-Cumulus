@@ -98,6 +98,7 @@ class HbCumulus extends Plugin
                 'number' => '30',
 		'compat' => FALSE,
 		'showhtml' => TRUE,
+		'gajax' => TRUE,	// This is a "secret" option.  Set this to TRUE if you prefer to use the swfobject.js hosted by Google.
             );
 
             $this->options = Options::get( self::OPTNAME );
@@ -319,7 +320,11 @@ class HbCumulus extends Plugin
     {
         $this->options = Options::get( self::OPTNAME );
         if ( ! $this->options['compat'] ) {
-	    Stack::add( 'template_header_javascript',  URL::get_from_filesystem( __FILE__ ) . '/lib/swfobject-min.js', 'swfobject' );
+	    if ( $this->options['gajax'] ) {
+		Stack::add( 'template_header_javascript',  'http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js', 'swfobject' );
+	    } else {
+		Stack::add( 'template_header_javascript',  URL::get_from_filesystem( __FILE__ ) . '/lib/swfobject-min.js', 'swfobject' );
+	    }
         }
     }
 
