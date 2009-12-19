@@ -31,7 +31,6 @@
 class HbCumulus extends Plugin
 {
     private $options = array();
-    private $version = '1.5';
     const OPTNAME = 'hb-cumulus__options';
 
     /**
@@ -69,7 +68,7 @@ class HbCumulus extends Plugin
      **/
     public function action_update_check()
     {
-		Update::add( 'HB-Cumulus', 'F7A0CCFC-C5DF-11DD-A399-37B955D89593', $this->version );
+		Update::add( 'HB-Cumulus', 'F7A0CCFC-C5DF-11DD-A399-37B955D89593', $this->info->version );
     }
 
     /**
