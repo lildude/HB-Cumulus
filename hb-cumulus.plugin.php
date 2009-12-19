@@ -226,7 +226,7 @@ class HbCumulus extends Plugin
             $newOptions[$name] = $option->value;
         }
         Options::set( self::OPTNAME, $newOptions );
-		Session::notice(_t( 'Options successfully saved.' ) );
+	Session::notice(_t( 'Options successfully saved.' ) );
      }
 
     /**
