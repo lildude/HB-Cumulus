@@ -380,12 +380,12 @@ class HbCumulus extends Plugin
 	    }
 
 	    $flashtag .= '" />';
-	    $flashtag .= '<div id="hbcumulus_'.$class.'"';
+	    $flashtag .= '<span id="hbcumulus_'.$class.'"';
 	    if ( ! $this->options['showhtml'] ) {
 		$flashtag .= ' style="display:none;"';
 	    }
 	    $flashtag .= '>'. urldecode($tagcloud);
-	    $flashtag .= '</div></object></object>';
+	    $flashtag .= '</span></object></object>';
 	} else {
 	    // Using swfobject "dynamic" method
 	    // Construct the Javascript
@@ -410,12 +410,12 @@ class HbCumulus extends Plugin
 	    $flashtag .= '<script type="text/javascript">';
 	    $flashtag .= 'swfobject.embedSWF("'.$movie.'", "hbcumulus_'.$class.'", "'.$this->options['width'].'", "'.$this->options['height'].'", "9.0.0", false, {'.$flashVars.'}, {'.$params.'}, {'.$attributes.'})';
 	    $flashtag .= '</script>';
-	    $flashtag .= '<div id="hbcumulus_'.$class.'"';
+	    $flashtag .= '<span id="hbcumulus_'.$class.'"';
 	    if ( ! $this->options['showhtml'] ) {
 		$flashtag .= ' style="display:none;"';
 	    }
 	    $flashtag .= '>'. urldecode($tagcloud);
-	    $flashtag .= '</div>';
+	    $flashtag .= '</span>';
 	}
         return $flashtag;
     }
