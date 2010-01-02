@@ -393,6 +393,7 @@ class HbCumulus extends Plugin
 		$flashtag .= '<!--[if !IE]>-->';
 		$flashtag .= '</object>';
 		$flashtag .= '<!--<![endif]-->';
+		$flashtag .= '<!--[if IE]>-->';
 		$flashtag .= '</object>';
 		$flashtag .= '<!-- <![endif]-->';
 	} else {
