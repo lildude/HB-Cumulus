@@ -393,9 +393,9 @@ class HbCumulus extends Plugin
 		$flashtag .= '<!--[if !IE]>-->';
 		$flashtag .= '</object>';
 		$flashtag .= '<!--<![endif]-->';
-		$flashtag .= '<!--[if IE]>-->';
+		$flashtag .= '<!--[if IE]>';
 		$flashtag .= '</object>';
-		$flashtag .= '<!-- <![endif]-->';
+		$flashtag .= '<!-->';
 	} else {
 	    // Using swfobject "dynamic" method
 	    // Construct the Javascript
