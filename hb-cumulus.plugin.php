@@ -359,10 +359,10 @@ class HbCumulus extends Plugin
         $movie =  $this->get_url() .'/lib/tagcloud.swf';
 	if ( $this->options['compat'] ) {
 	    // Non-JS method
-	    $flashtag = '<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" data="'.$movie.'" width="'.$this->options['width'].'" height="'.$this->options['height'].'">';
-	    $flashtag .= '<param name="movie" value="'.$movie.'" />';
+	    //$flashtag = '<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" data="'.$movie.'" width="'.$this->options['width'].'" height="'.$this->options['height'].'">';
+	    //$flashtag .= '<param name="movie" value="'.$movie.'" />';
 	    $flashtag .= '<object type="application/x-shockwave-flash" data="'.$movie.'" width="'.$this->options['width'].'" height="'.$this->options['height'].'">';
-	    $flashtag .= '<param name="bgcolor" value="#'.$this->options['bgcolor'].'" />';
+		$flashtag .= '<param name="bgcolor" value="#'.$this->options['bgcolor'].'" />';
 	    $flashtag .= '<param name="AllowScriptAccess" value="always" />';
 	    if( $this->options['trans'] ){
 		$flashtag .= '<param name="wmode" value="transparent" />';
@@ -385,7 +385,9 @@ class HbCumulus extends Plugin
 		$flashtag .= ' style="display:none;"';
 	    }
 	    $flashtag .= '>'. urldecode($tagcloud);
-	    $flashtag .= '</span></object></object>';
+	    $flashtag .= '</span>';
+		//$flashtag .= '</object>';
+		$flashtag .= '</object>';
 	} else {
 	    // Using swfobject "dynamic" method
 	    // Construct the Javascript
