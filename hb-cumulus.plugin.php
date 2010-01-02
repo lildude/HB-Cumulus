@@ -359,13 +359,17 @@ class HbCumulus extends Plugin
         $movie =  $this->get_url() .'/lib/tagcloud.swf';
 	if ( $this->options['compat'] ) {
 	    // Non-JS method
-	    //$flashtag = '<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" data="'.$movie.'" width="'.$this->options['width'].'" height="'.$this->options['height'].'">';
-	    //$flashtag .= '<param name="movie" value="'.$movie.'" />';
+		$flashtag = '<!--[if IE]>';
+	    $flashtag .= '<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" data="'.$movie.'" width="'.$this->options['width'].'" height="'.$this->options['height'].'">';
+	    $flashtag .= '<param name="movie" value="'.$movie.'" />';
+		$flashtag .= '<!-->';
+		$flashtag .= '<!--[if !IE]>-->';
 	    $flashtag .= '<object type="application/x-shockwave-flash" data="'.$movie.'" width="'.$this->options['width'].'" height="'.$this->options['height'].'">';
+		$flashtag .= '<!--<![endif]-->';
 		$flashtag .= '<param name="bgcolor" value="#'.$this->options['bgcolor'].'" />';
 	    $flashtag .= '<param name="AllowScriptAccess" value="always" />';
 	    if( $this->options['trans'] ){
-		$flashtag .= '<param name="wmode" value="transparent" />';
+			$flashtag .= '<param name="wmode" value="transparent" />';
 	    }
 	    $flashtag .= '<param name="flashvars" value="';
 	    $flashtag .= 'tcolor=0x' . $this->options['tcolor'];
@@ -386,8 +390,11 @@ class HbCumulus extends Plugin
 	    }
 	    $flashtag .= '>'. urldecode($tagcloud);
 	    $flashtag .= '</span>';
-		//$flashtag .= '</object>';
+		$flashtag .= '<!--[if !IE]>-->';
 		$flashtag .= '</object>';
+		$flashtag .= '<!--<![endif]-->';
+		$flashtag .= '</object>';
+		$flashtag .= '<!-- <![endif]-->';
 	} else {
 	    // Using swfobject "dynamic" method
 	    // Construct the Javascript
