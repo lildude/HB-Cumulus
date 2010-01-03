@@ -160,7 +160,7 @@ class HbCumulus extends Plugin
 	    switch ( $action ) {
 		case _t( 'Configure' ):
 		$this->options = Options::get( self::OPTNAME );
-		    $ui= new FormUI( strtolower( get_class( $this ) ) );
+		    $ui= new FormUI( strtolower( __CLASS__ ) );
 		    $ui->append( 'hidden', 'option_mode', 'null:null' );
 			$ui->option_mode->value = $this->options['mode'];
 		    $ui->append( 'text', 'options_width', 'null:null', _t( 'Width of Flash Tag Cloud (px)' ), 'optionscontrol_text' );
