@@ -34,33 +34,6 @@ class HbCumulus extends Plugin
     const OPTNAME = 'hb-cumulus__options';
 
     /**
-     * The help message - it provides a larger explanation of what this plugin
-     * does
-     *
-     * @return string
-     */
-    public function help()
-    {
-	return _t( '<p>HB-Cumulus is a Flash-based tag cloud for Habari that displays your tag cloud in a rotating sphere.</p>
-		    <p>HB-Cumulus is a port of the brilliant <a href="http://wordpress.org/extend/plugins/wp-cumulus/">WP-Cumulus</a> by <a href="http://www.roytanck.com/">Roy Tanck</a>.</p>
-		    <br /><strong>Usage:</strong><br />
-		    <p>There are two ways you can use HB-Cumulus:
-		    <ol>
-		    <li>In ANY page or post:<br />
-		    <p>You can show the cloud in any page or post by putting the following code into the post/page content:<br />
-		    <code>&lt;!-- hb-cumulus --&gt;</code>
-		    <br /></p>
-		    <p>This tag is NOT case sensitive, so don\'t worry too much about the case or spacing. So long as you have all of the above characters in that order, it should display.</p></li>
-
-		    <li>In ANY theme file:<br />
-		    <p>You can show the cloud anywhere on your site within your theme files, for example in the sidebar using:<br />
-		    <code>$theme-&gt;hbcumulus();</code>
-		    <br /></p>
-		    <p>This IS case sensitive, so you\'ll need to be sure you get it 100% correct.</p></li>
-		    </ol></p>' );
-    }
-
-    /**
      * Beacon Support for Update checking
      *
      * @access public
@@ -96,9 +69,9 @@ class HbCumulus extends Plugin
                 'minfont' => '8',
                 'maxfont' => '25',
                 'number' => '30',
-		'compat' => FALSE,
-		'showhtml' => TRUE,
-		'gajax' => FALSE,	// This is a "secret" option.  Set this to TRUE if you prefer to use the swfobject.js hosted by Google.
+				'compat' => FALSE,
+				'showhtml' => TRUE,
+				'gajax' => FALSE,	// This is a "secret" option.  Set this to TRUE if you prefer to use the swfobject.js hosted by Google.
             );
 
             $this->options = Options::get( self::OPTNAME );

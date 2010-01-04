@@ -9,4 +9,23 @@
 	<downloadurl>http://www.lildude.co.uk/projects/hb-audio-player</downloadurl>
     <description><![CDATA[Flash based Tag Cloud for Habari.]]></description>
     <guid>F7A0CCFC-C5DF-11DD-A399-37B955D89593</guid>
+	<help>
+		<value><![CDATA[<p>HB-Cumulus is a Flash-based tag cloud for Habari that displays your tag cloud in a rotating sphere.</p>
+		    <p>HB-Cumulus is a port of the brilliant <a href="http://wordpress.org/extend/plugins/wp-cumulus/">WP-Cumulus</a> by <a href="http://www.roytanck.com/">Roy Tanck</a>.</p>
+		    <br /><strong>Usage:</strong><br />
+		    <p>There are two ways you can use HB-Cumulus:
+		    <ol>
+		    <li>In ANY page or post:<br />
+		    <p>You can show the cloud in any page or post by putting the following code into the post/page content:<br />
+		    <code>&lt;!-- hb-cumulus --&gt;</code>
+		    <br /></p>
+		    <p>This tag is NOT case sensitive, so don\'t worry too much about the case or spacing. So long as you have all of the above characters in that order, it should display.</p></li>
+
+		    <li>In ANY theme file:<br />
+		    <p>You can show the cloud anywhere on your site within your theme files, for example in the sidebar using:<br />
+		    <code>$theme-&gt;hbcumulus();</code>
+		    <br /></p>
+		    <p>This IS case sensitive, so you\'ll need to be sure you get it 100% correct.</p></li>
+		    </ol></p>]]></value>
+	</help>
 </pluggable>
