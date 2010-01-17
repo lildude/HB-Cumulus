@@ -454,39 +454,39 @@ class HbCumulus extends Plugin
      */
     private function build_tag_cloud( $num_tag = '' )
     {
-		$tag_cloud = '';
-		$post_type = Post::type( 'entry' );
-		$post_status = Post::status( 'published' );
-
-		$limit = ( empty( $num_tag ) ) ? '' : "LIMIT {$num_tag}";
-
-		$hide_tags = self::get_hide_tag_list();
-		$total_tag_cnt = Tags::count_total();
-		$most_popular_tag_cnt = Tags::max_count();
-        $vocab_id = Tags::vocabulary()->id;
-
-		$sql = "
-		SELECT t.term_display AS tag_text, t.term AS tag_slug, t.id AS id,
-			COUNT(t2p.object_id) AS cnt,
-			COUNT(t2p.object_id) * 100 / {$total_tag_cnt} AS weight,
-			COUNT(t2p.object_id) * 100 / {$most_popular_tag_cnt} AS relative_weight
-		FROM {posts} p
-		INNER JOIN {object_terms} t2p
-		ON p.id = t2p.object_id
-		INNER JOIN {terms} t
-		ON t2p.term_id = t.id
-		WHERE p.content_type = {$post_type}
-		AND p.status = {$post_status}
-                AND t.vocabulary_id = {$vocab_id}
-		{$hide_tags}
-		GROUP BY t.term_display, t.term, t.id
-		ORDER BY weight DESC
-		{$limit}";
-
 		// Cache so we don't have to keep querying the DB.
 		if ( Cache::has( __CLASS__ ) && !Cache::expired( __CLASS__ ) ) {
 			$results = Cache::get( __CLASS__ );
 		} else {
+			$tag_cloud = '';
+			$post_type = Post::type( 'entry' );
+			$post_status = Post::status( 'published' );
+
+			$limit = ( empty( $num_tag ) ) ? '' : "LIMIT {$num_tag}";
+
+			$hide_tags = self::get_hide_tag_list();
+			$total_tag_cnt = Tags::count_total();
+			$most_popular_tag_cnt = Tags::max_count();
+			$vocab_id = Tags::vocabulary()->id;
+
+			$sql = "
+			SELECT t.term_display AS tag_text, t.term AS tag_slug, t.id AS id,
+				COUNT(t2p.object_id) AS cnt,
+				COUNT(t2p.object_id) * 100 / {$total_tag_cnt} AS weight,
+				COUNT(t2p.object_id) * 100 / {$most_popular_tag_cnt} AS relative_weight
+			FROM {posts} p
+			INNER JOIN {object_terms} t2p
+			ON p.id = t2p.object_id
+			INNER JOIN {terms} t
+			ON t2p.term_id = t.id
+			WHERE p.content_type = {$post_type}
+			AND p.status = {$post_status}
+					AND t.vocabulary_id = {$vocab_id}
+			{$hide_tags}
+			GROUP BY t.term_display, t.term, t.id
+			ORDER BY weight DESC
+			{$limit}";
+	
 			$results = DB::get_results( $sql );
 			Cache::set( __CLASS__, $results, 86400 ); // 24 hours
 		}
