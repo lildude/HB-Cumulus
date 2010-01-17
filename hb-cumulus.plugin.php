@@ -293,11 +293,11 @@ class HbCumulus extends Plugin
     {
         $this->options = Options::get( self::OPTNAME );
         if ( ! $this->options['compat'] ) {
-	    if ( $this->options['gajax'] ) {
-		Stack::add( 'template_header_javascript',  'http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js', 'swfobject' );
-	    } else {
-		Stack::add( 'template_header_javascript',  URL::get_from_filesystem( __FILE__ ) . '/lib/swfobject-min.js', 'swfobject' );
-	    }
+			if ( $this->options['gajax'] ) {
+			Stack::add( 'template_header_javascript',  'http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js', 'swfobject' );
+			} else {
+			Stack::add( 'template_header_javascript',  URL::get_from_filesystem( __FILE__ ) . '/lib/swfobject-min.js', 'swfobject' );
+			}
         }
     }
 
@@ -454,18 +454,18 @@ class HbCumulus extends Plugin
      */
     private function build_tag_cloud( $num_tag = '' )
     {
-	$tag_cloud = '';
-	$post_type = Post::type( 'entry' );
-	$post_status = Post::status( 'published' );
+		$tag_cloud = '';
+		$post_type = Post::type( 'entry' );
+		$post_status = Post::status( 'published' );
 
-	$limit = ( empty( $num_tag ) ) ? '' : "LIMIT {$num_tag}";
+		$limit = ( empty( $num_tag ) ) ? '' : "LIMIT {$num_tag}";
 
-	$hide_tags = self::get_hide_tag_list();
-	$total_tag_cnt = Tags::count_total();
-	$most_popular_tag_cnt = Tags::max_count();
+		$hide_tags = self::get_hide_tag_list();
+		$total_tag_cnt = Tags::count_total();
+		$most_popular_tag_cnt = Tags::max_count();
         $vocab_id = Tags::vocabulary()->id;
 
-	$sql = "
+		$sql = "
 		SELECT t.term_display AS tag_text, t.term AS tag_slug, t.id AS id,
 			COUNT(t2p.object_id) AS cnt,
 			COUNT(t2p.object_id) * 100 / {$total_tag_cnt} AS weight,
@@ -482,18 +482,25 @@ class HbCumulus extends Plugin
 		GROUP BY t.term_display, t.term, t.id
 		ORDER BY weight DESC
 		{$limit}";
-	$results = DB::get_results( $sql );
+
+		// Cache so we don't have to keep querying the DB.
+		if ( Cache::has( __CLASS__ ) && !Cache::expired( __CLASS__ ) ) {
+			$results = Cache::get( __CLASS__ );
+		} else {
+			$results = DB::get_results( $sql );
+			Cache::set( __CLASS__, $results, 86400 ); // 24 hours
+		}
 
         $tag_cloud = '';
         if ( $results ) {
-	    sort( $results );
-	    foreach ( $results as $tag ) {
-		$style_str = '';
-                $style_str = 'style="font-size:' . self::get_font_size_for_weight( $tag->relative_weight ) . ';"';
+			sort( $results );
+			foreach ( $results as $tag ) {
+				$style_str = '';
+				$style_str = 'style="font-size:' . self::get_font_size_for_weight( $tag->relative_weight ) . ';"';
                 $tag_cloud.= '<a ' . $style_str . ' href="' . URL::get( 'display_entries_by_tag', array ( 'tag' => $tag->tag_slug ), false ) . '" rel="tag" title="' . $tag->tag_text . ' (' . $tag->cnt . ')' . '">' . $tag->tag_text . '</a>';
             }
         }
-	return $tag_cloud;
+		return $tag_cloud;
     }
 
     /**
