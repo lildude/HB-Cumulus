@@ -291,14 +291,7 @@ class HbCumulus extends Plugin
      */
     public function theme_header( $theme )
     {
-        $this->options = Options::get( self::OPTNAME );
-        if ( ! $this->options['compat'] ) {
-			if ( $this->options['gajax'] ) {
-			Stack::add( 'template_header_javascript',  'http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js', 'swfobject' );
-			} else {
-			Stack::add( 'template_header_javascript',  URL::get_from_filesystem( __FILE__ ) . '/lib/swfobject-min.js', 'swfobject' );
-			}
-        }
+	Stack::add( 'template_header_javascript',  URL::get_from_filesystem( __FILE__ ) . '/lib/swfobject-min.js', 'swfobject' );
     }
 
     /**
@@ -311,94 +304,100 @@ class HbCumulus extends Plugin
      */
     private function get_flashcode( $class = '', $config = FALSE )
     {
-        $this->options = Options::get( self::OPTNAME );
-        $flashtag = '';
-        if ( $config ) {
-            if ( $this->options['width'] < 300 && $this->options['height'] < 300 ) {
-                $max = ( $this->options['width'] >= $this->options['height'] ) ? $this->options['width'] : $this->options['height'];
-            }
-	    else {
-                $max = '300';
-                $flashtag .= '<span> ('._t('Scaled to fit').')</span>';
-            }
+	// Cache so we don't have to keep querying the DB.
+	if ( Cache::has( __CLASS__ ) && !Cache::expired( __CLASS__ ) ) {
+	    $flashtag = Cache::get( __CLASS__ );
+	} else {
+	    $this->options = Options::get( self::OPTNAME );
+	    $flashtag = '';
+	    if ( $config ) {
+		if ( $this->options['width'] < 300 && $this->options['height'] < 300 ) {
+		    $max = ( $this->options['width'] >= $this->options['height'] ) ? $this->options['width'] : $this->options['height'];
+		}
+		else {
+		    $max = '300';
+		    $flashtag .= '<span> ('._t('Scaled to fit').')</span>';
+		}
 
-            $ratio = $this->options['height']/$this->options['width'];
-            $this->options['width'] = ( $ratio > 1 ) ? $max*( 1/$ratio ) : $max;
-            $this->options['height'] = ( $ratio > 1 ) ? $max : $max*$ratio;
-        }
-        ob_start();
-        echo self::build_tag_cloud( $this->options['number'] );
-        $tagcloud = urlencode( str_replace( "&nbsp;", " ", ob_get_clean() ) );
-        $movie =  $this->get_url() .'/lib/tagcloud.swf';
-	if ( $this->options['compat'] ) {
-	    // Non-JS method
+		$ratio = $this->options['height']/$this->options['width'];
+		$this->options['width'] = ( $ratio > 1 ) ? $max*( 1/$ratio ) : $max;
+		$this->options['height'] = ( $ratio > 1 ) ? $max : $max*$ratio;
+	    }
+	    ob_start();
+	    echo self::build_tag_cloud( $this->options['number'] );
+	    $tagcloud = urlencode( str_replace( "&nbsp;", " ", ob_get_clean() ) );
+	    $movie =  $this->get_url() .'/lib/tagcloud.swf';
+	    if ( $this->options['compat'] ) {
+		// Non-JS method
 		$flashtag = '<!--[if IE]>';
-	    $flashtag .= '<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" data="'.$movie.'" width="'.$this->options['width'].'" height="'.$this->options['height'].'">';
-	    $flashtag .= '<param name="movie" value="'.$movie.'" />';
+		$flashtag .= '<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" data="'.$movie.'" width="'.$this->options['width'].'" height="'.$this->options['height'].'">';
+		$flashtag .= '<param name="movie" value="'.$movie.'" />';
 		$flashtag .= '<!-->';
 		$flashtag .= '<!--[if !IE]>-->';
-	    $flashtag .= '<object type="application/x-shockwave-flash" data="'.$movie.'" width="'.$this->options['width'].'" height="'.$this->options['height'].'">';
+		$flashtag .= '<object type="application/x-shockwave-flash" data="'.$movie.'" width="'.$this->options['width'].'" height="'.$this->options['height'].'">';
 		$flashtag .= '<!--<![endif]-->';
 		$flashtag .= '<param name="bgcolor" value="#'.$this->options['bgcolor'].'" />';
-	    $flashtag .= '<param name="AllowScriptAccess" value="always" />';
-	    if( $this->options['trans'] ){
-			$flashtag .= '<param name="wmode" value="transparent" />';
-	    }
-	    $flashtag .= '<param name="flashvars" value="';
-	    $flashtag .= 'tcolor=0x' . $this->options['tcolor'];
-	    $flashtag .= '&amp;tcolor2=0x' . ($this->options['tcolor2'] == "" ? $this->options['tcolor'] : $this->options['tcolor2']);
-	    $flashtag .= '&amp;hicolor=0x' . ($this->options['hicolor'] == "" ? $this->options['tcolor'] : $this->options['hicolor']);
-	    $flashtag .= '&amp;tspeed='.$this->options['speed'];
-	    $flashtag .= '&amp;distr='.$this->options['distr'];
-	    $flashtag .= '&amp;mode='.$this->options['mode'];
-	    // put tags in flashvar
-	    if( $this->options['mode'] != "cats" ){
-		$flashtag .= '&amp;tagcloud='.urlencode('<tags>') . $tagcloud . urlencode('</tags>');
-	    }
+		$flashtag .= '<param name="AllowScriptAccess" value="always" />';
+		if( $this->options['trans'] ){
+		    $flashtag .= '<param name="wmode" value="transparent" />';
+		}
+		$flashtag .= '<param name="flashvars" value="';
+		$flashtag .= 'tcolor=0x' . $this->options['tcolor'];
+		$flashtag .= '&amp;tcolor2=0x' . ($this->options['tcolor2'] == "" ? $this->options['tcolor'] : $this->options['tcolor2']);
+		$flashtag .= '&amp;hicolor=0x' . ($this->options['hicolor'] == "" ? $this->options['tcolor'] : $this->options['hicolor']);
+		$flashtag .= '&amp;tspeed='.$this->options['speed'];
+		$flashtag .= '&amp;distr='.$this->options['distr'];
+		$flashtag .= '&amp;mode='.$this->options['mode'];
+		// put tags in flashvar
+		if( $this->options['mode'] != "cats" ){
+		    $flashtag .= '&amp;tagcloud='.urlencode('<tags>') . $tagcloud . urlencode('</tags>');
+		}
 
-	    $flashtag .= '" />';
-	    $flashtag .= '<span id="hbcumulus_'.$class.'"';
-	    if ( ! $this->options['showhtml'] ) {
-		$flashtag .= ' style="display:none;"';
-	    }
-	    $flashtag .= '>'. urldecode($tagcloud);
-	    $flashtag .= '</span>';
+		$flashtag .= '" />';
+		$flashtag .= '<span id="hbcumulus_'.$class.'"';
+		if ( ! $this->options['showhtml'] ) {
+		    $flashtag .= ' style="display:none;"';
+		}
+		$flashtag .= '>'. urldecode($tagcloud);
+		$flashtag .= '</span>';
 		$flashtag .= '<!--[if !IE]>-->';
 		$flashtag .= '</object>';
 		$flashtag .= '<!--<![endif]-->';
 		$flashtag .= '<!--[if IE]>';
 		$flashtag .= '</object>';
 		$flashtag .= '<!-->';
-	} else {
-	    // Using swfobject "dynamic" method
-	    // Construct the Javascript
-	    $flashVars = 'tcolor:"0x'.$this->options['tcolor'].'"';
-	    $flashVars .= ',tcolor2:"0x' . ($this->options['tcolor2'] == "" ? $this->options['tcolor'] : $this->options['tcolor2']) . '"';
-	    $flashVars .= ',hicolor:"0x' . ($this->options['hicolor'] == "" ? $this->options['tcolor'] : $this->options['hicolor']) . '"';
-	    $flashVars .= ',tspeed:"'.$this->options['speed'].'"';
-	    $flashVars .= ',distr:"'.$this->options['distr'].'"';
-	    $flashVars .= ',mode:"'.$this->options['mode'].'"';
+	    } else {
+		// Using swfobject "dynamic" method
+		// Construct the Javascript
+		$flashVars = 'tcolor:"0x'.$this->options['tcolor'].'"';
+		$flashVars .= ',tcolor2:"0x' . ($this->options['tcolor2'] == "" ? $this->options['tcolor'] : $this->options['tcolor2']) . '"';
+		$flashVars .= ',hicolor:"0x' . ($this->options['hicolor'] == "" ? $this->options['tcolor'] : $this->options['hicolor']) . '"';
+		$flashVars .= ',tspeed:"'.$this->options['speed'].'"';
+		$flashVars .= ',distr:"'.$this->options['distr'].'"';
+		$flashVars .= ',mode:"'.$this->options['mode'].'"';
 
-	    if( $this->options['mode'] != "cats" ){
-		$flashVars .= ',tagcloud:"'.urlencode('<tags>') . $tagcloud . urlencode('</tags>').'"';
-	    }
+		if( $this->options['mode'] != "cats" ){
+		    $flashVars .= ',tagcloud:"'.urlencode('<tags>') . $tagcloud . urlencode('</tags>').'"';
+		}
 
-	    $params = 'menu:false,bgcolor:"'.$this->options['bgcolor'].'",allowScriptAccess:"always"';
-	    if( $this->options['trans'] ){
-		$params .= ',wmode:"transparent"';
-	    }
+		$params = 'menu:false,bgcolor:"'.$this->options['bgcolor'].'",allowScriptAccess:"always"';
+		if( $this->options['trans'] ){
+		    $params .= ',wmode:"transparent"';
+		}
 
-	    $attributes = '';
-	    // We only embed the Javascript into the body of the doc so we can support both the $theme->hb-cumulus() AND <!-- hb-cumulus --> methods of embedding
-	    $flashtag .= '<script type="text/javascript">';
-	    $flashtag .= 'swfobject.embedSWF("'.$movie.'", "hbcumulus_'.$class.'", "'.$this->options['width'].'", "'.$this->options['height'].'", "9.0.0", false, {'.$flashVars.'}, {'.$params.'}, {'.$attributes.'})';
-	    $flashtag .= '</script>';
-	    $flashtag .= '<span id="hbcumulus_'.$class.'"';
-	    if ( ! $this->options['showhtml'] ) {
-		$flashtag .= ' style="display:none;"';
+		$attributes = '';
+		// We only embed the Javascript into the body of the doc so we can support both the $theme->hb-cumulus() AND <!-- hb-cumulus --> methods of embedding
+		$flashtag .= '<script type="text/javascript">';
+		$flashtag .= 'swfobject.embedSWF("'.$movie.'", "hbcumulus_'.$class.'", "'.$this->options['width'].'", "'.$this->options['height'].'", "9.0.0", false, {'.$flashVars.'}, {'.$params.'}, {'.$attributes.'})';
+		$flashtag .= '</script>';
+		$flashtag .= '<span id="hbcumulus_'.$class.'"';
+		if ( ! $this->options['showhtml'] ) {
+		    $flashtag .= ' style="display:none;"';
+		}
+		$flashtag .= '>'. urldecode($tagcloud);
+		$flashtag .= '</span>';
 	    }
-	    $flashtag .= '>'. urldecode($tagcloud);
-	    $flashtag .= '</span>';
+	    Cache::set( __CLASS__, $flashtag, 86400 ); // 24 hours
 	}
         return $flashtag;
     }
@@ -454,53 +453,47 @@ class HbCumulus extends Plugin
      */
     private function build_tag_cloud( $num_tag = '' )
     {
-		// Cache so we don't have to keep querying the DB.
-		if ( Cache::has( __CLASS__ ) && !Cache::expired( __CLASS__ ) ) {
-			$results = Cache::get( __CLASS__ );
-		} else {
-			$tag_cloud = '';
-			$post_type = Post::type( 'entry' );
-			$post_status = Post::status( 'published' );
+	$tag_cloud = '';
+	$post_type = Post::type( 'entry' );
+	$post_status = Post::status( 'published' );
 
-			$limit = ( empty( $num_tag ) ) ? '' : "LIMIT {$num_tag}";
+	$limit = ( empty( $num_tag ) ) ? '' : "LIMIT {$num_tag}";
 
-			$hide_tags = self::get_hide_tag_list();
-			$total_tag_cnt = Tags::count_total();
-			$most_popular_tag_cnt = Tags::max_count();
-			$vocab_id = Tags::vocabulary()->id;
+	$hide_tags = self::get_hide_tag_list();
+	$total_tag_cnt = Tags::count_total();
+	$most_popular_tag_cnt = Tags::max_count();
+	$vocab_id = Tags::vocabulary()->id;
 
-			$sql = "
-			SELECT t.term_display AS tag_text, t.term AS tag_slug, t.id AS id,
-				COUNT(t2p.object_id) AS cnt,
-				COUNT(t2p.object_id) * 100 / {$total_tag_cnt} AS weight,
-				COUNT(t2p.object_id) * 100 / {$most_popular_tag_cnt} AS relative_weight
-			FROM {posts} p
-			INNER JOIN {object_terms} t2p
-			ON p.id = t2p.object_id
-			INNER JOIN {terms} t
-			ON t2p.term_id = t.id
-			WHERE p.content_type = {$post_type}
-			AND p.status = {$post_status}
-					AND t.vocabulary_id = {$vocab_id}
-			{$hide_tags}
-			GROUP BY t.term_display, t.term, t.id
-			ORDER BY weight DESC
-			{$limit}";
-	
-			$results = DB::get_results( $sql );
-			Cache::set( __CLASS__, $results, 86400 ); // 24 hours
-		}
+	$sql = "
+	SELECT t.term_display AS tag_text, t.term AS tag_slug, t.id AS id,
+		COUNT(t2p.object_id) AS cnt,
+		COUNT(t2p.object_id) * 100 / {$total_tag_cnt} AS weight,
+		COUNT(t2p.object_id) * 100 / {$most_popular_tag_cnt} AS relative_weight
+	FROM {posts} p
+	INNER JOIN {object_terms} t2p
+	ON p.id = t2p.object_id
+	INNER JOIN {terms} t
+	ON t2p.term_id = t.id
+	WHERE p.content_type = {$post_type}
+	AND p.status = {$post_status}
+			AND t.vocabulary_id = {$vocab_id}
+	{$hide_tags}
+	GROUP BY t.term_display, t.term, t.id
+	ORDER BY weight DESC
+	{$limit}";
 
-        $tag_cloud = '';
-        if ( $results ) {
-			sort( $results );
-			foreach ( $results as $tag ) {
-				$style_str = '';
-				$style_str = 'style="font-size:' . self::get_font_size_for_weight( $tag->relative_weight ) . ';"';
-                $tag_cloud.= '<a ' . $style_str . ' href="' . URL::get( 'display_entries_by_tag', array ( 'tag' => $tag->tag_slug ), false ) . '" rel="tag" title="' . $tag->tag_text . ' (' . $tag->cnt . ')' . '">' . $tag->tag_text . '</a>';
-            }
-        }
-		return $tag_cloud;
+	$results = DB::get_results( $sql );
+
+	$tag_cloud = '';
+	if ( $results ) {
+	    sort( $results );
+	    foreach ( $results as $tag ) {
+		$style_str = '';
+		$style_str = 'style="font-size:' . self::get_font_size_for_weight( $tag->relative_weight ) . ';"';
+		$tag_cloud.= '<a ' . $style_str . ' href="' . URL::get( 'display_entries_by_tag', array ( 'tag' => $tag->tag_slug ), false ) . '" rel="tag" title="' . $tag->tag_text . ' (' . $tag->cnt . ')' . '">' . $tag->tag_text . '</a>';
+	    }
+	}
+	return $tag_cloud;
     }
 
     /**
