@@ -71,7 +71,7 @@ class HbCumulus extends Plugin
 					'number' => '30',
 					'compat' => FALSE,
 					'showhtml' => TRUE,
-					'gajax' => FALSE,	// This is a "secret" option.  Set this to TRUE if you prefer to use the swfobject.js hosted by Google.
+					'inbody' => FALSE,
 				);
 
 				$this->options = Options::get( self::OPTNAME );
@@ -162,6 +162,9 @@ class HbCumulus extends Plugin
 					$ui->options_maxfont->value = $this->options['maxfont'];
 					$ui->append( 'text', 'options_number', 'null:null', _t( 'Number of Tags to Show' ), 'optionscontrol_text' );
 					$ui->options_number->value = $this->options['number'];
+					$ui->append( 'checkbox', 'options_inbody', 'null:null', _t( 'Using in Posts/Pages' ), 'optionscontrol_checkbox' );
+					$ui->options_inbody->value = $this->options['inbody'];
+					$ui->options_inbody->helptext = _t( 'Only check this box if you are using the <!-- hb-cumulus --> tag to insert the tag cloud into individual posts or pages.' );
 					$ui->append( 'checkbox', 'options_trans', 'null:null', _t( 'Use Transparent Mode' ), 'optionscontrol_checkbox' );
 					$ui->options_trans->value = $this->options['trans'];
 					$ui->append( 'checkbox', 'options_distr', 'null:null', _t( 'Distribute Tags Evenly' ), 'optionscontrol_checkbox' );
@@ -521,7 +524,8 @@ class HbCumulus extends Plugin
      */
     public function filter_hbcumulus ( $content)
     {
-        $content= preg_replace( '/<!--\s*hb-cumulus\s*-->/i', $this->get_flashcode( 'post' ), $content );
+		$this->options = Options::get( self::OPTNAME );
+		$content = ($this->options['inbody'] ) ? preg_replace( '/<!--\s*hb-cumulus\s*-->/i', $this->get_flashcode( 'post' ), $content ) : $content;
         return $content;
     }
 
