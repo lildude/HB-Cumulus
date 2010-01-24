@@ -202,6 +202,9 @@ class HbCumulus extends Plugin
             $newOptions[$name] = $option->value;
         }
         Options::set( self::OPTNAME, $newOptions );
+		foreach ( Cache::get_group( __CLASS__ ) as $name => $data ) {
+            Cache::expire( array( __CLASS__, $name ) );
+        }
 		Session::notice(_t( 'Options successfully saved.' ) );
      }
 
@@ -308,8 +311,8 @@ class HbCumulus extends Plugin
     private function get_flashcode( $class = '', $config = FALSE )
     {
 		// Cache so we don't have to keep querying the DB.
-		if ( Cache::has( __CLASS__ . $class ) && !Cache::expired( __CLASS__ . $class ) ) {
-			$flashtag = Cache::get( __CLASS__ . $class );
+		if ( Cache::has( array( __CLASS__ , $class ) ) && !Cache::expired( array( __CLASS__ , $class ) ) ) {
+			$flashtag = Cache::get( array( __CLASS__ , $class ) );
 		} else {
 			$this->options = Options::get( self::OPTNAME );
 			$flashtag = '';
@@ -401,7 +404,7 @@ class HbCumulus extends Plugin
 				$flashtag .= '>'. urldecode($tagcloud);
 				$flashtag .= '</span>';
 			}
-			Cache::set( __CLASS__ . $class, $flashtag, 86400 ); // 24 hours
+			Cache::set( array( __CLASS__ , $class ), $flashtag, 86400 ); // 24 hours
 		}
 		unset( $this->options, $tagcloud );
         return $flashtag;
