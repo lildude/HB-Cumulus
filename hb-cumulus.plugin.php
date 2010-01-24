@@ -403,6 +403,7 @@ class HbCumulus extends Plugin
 			}
 			Cache::set( __CLASS__ . $class, $flashtag, 86400 ); // 24 hours
 		}
+		unset( $this->options, $tagcloud );
         return $flashtag;
     }
 
@@ -492,11 +493,12 @@ class HbCumulus extends Plugin
 		if ( $results ) {
 			sort( $results );
 			foreach ( $results as $tag ) {
-			$style_str = '';
-			$style_str = 'style="font-size:' . self::get_font_size_for_weight( $tag->relative_weight ) . ';"';
-			$tag_cloud.= '<a ' . $style_str . ' href="' . URL::get( 'display_entries_by_tag', array ( 'tag' => $tag->tag_slug ), false ) . '" rel="tag" title="' . $tag->tag_text . ' (' . $tag->cnt . ')' . '">' . $tag->tag_text . '</a>';
+				$style_str = '';
+				$style_str = 'style="font-size:' . self::get_font_size_for_weight( $tag->relative_weight ) . ';"';
+				$tag_cloud.= '<a ' . $style_str . ' href="' . URL::get( 'display_entries_by_tag', array ( 'tag' => $tag->tag_slug ), false ) . '" rel="tag" title="' . $tag->tag_text . ' (' . $tag->cnt . ')' . '">' . $tag->tag_text . '</a>';
 			}
 		}
+		unset( $results, $hide_tags, $total_tag_cnt, $most_popular_tag_cnt, $vocab_id, $tag ); // Free up memory
 		return $tag_cloud;
     }
 
@@ -512,7 +514,7 @@ class HbCumulus extends Plugin
      */
     public function action_init()
     {
-	Format::apply( 'hbcumulus', 'post_content_out' );
+		Format::apply( 'hbcumulus', 'post_content_out' );
     }
 
     /**
@@ -526,6 +528,7 @@ class HbCumulus extends Plugin
     {
 		$this->options = Options::get( self::OPTNAME );
 		$content = ($this->options['inbody'] ) ? preg_replace( '/<!--\s*hb-cumulus\s*-->/i', $this->get_flashcode( 'post' ), $content ) : $content;
+		unset($this->options);
         return $content;
     }
 
@@ -547,7 +550,7 @@ class HbCumulusFormat extends Format
 {
     public function hbcumulus( $content )
     {
-	return Plugins::filter( 'hbcumulus', $content );
+		return Plugins::filter( 'hbcumulus', $content );
     }
 }
 ?>
