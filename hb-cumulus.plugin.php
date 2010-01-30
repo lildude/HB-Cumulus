@@ -311,7 +311,7 @@ class HbCumulus extends Plugin
     private function get_flashcode( $class = '', $config = FALSE )
     {
 		// Cache so we don't have to keep querying the DB.
-		if ( Cache::has( array( __CLASS__ , $class1 ) ) && !Cache::expired( array( __CLASS__ , $class ) ) ) {
+		if ( Cache::has( array( __CLASS__ , $class ) ) && !Cache::expired( array( __CLASS__ , $class ) ) ) {
 			$flashtag = Cache::get( array( __CLASS__ , $class ) );
 		} else {
 			$this->options = Options::get( self::OPTNAME );
