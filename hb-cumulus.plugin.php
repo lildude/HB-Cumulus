@@ -164,7 +164,7 @@ class HbCumulus extends Plugin
 					$ui->options_number->value = $this->options['number'];
 					$ui->append( 'checkbox', 'options_inbody', 'null:null', _t( 'Using in Posts/Pages' ), 'optionscontrol_checkbox' );
 					$ui->options_inbody->value = $this->options['inbody'];
-					$ui->options_inbody->helptext = _t( 'Only check this box if you are using the <!-- hb-cumulus --> tag to insert the tag cloud into individual posts or pages.' );
+					$ui->options_inbody->helptext = _t( 'Only check this box if you are using the &lt;!-- hb-cumulus --&gt; tag to insert the tag cloud into individual posts or pages.' );
 					$ui->append( 'checkbox', 'options_trans', 'null:null', _t( 'Use Transparent Mode' ), 'optionscontrol_checkbox' );
 					$ui->options_trans->value = $this->options['trans'];
 					$ui->append( 'checkbox', 'options_distr', 'null:null', _t( 'Distribute Tags Evenly' ), 'optionscontrol_checkbox' );
@@ -281,8 +281,11 @@ class HbCumulus extends Plugin
     public function action_admin_header( $theme )
     {
         if ( Controller::get_var( 'configure' ) == $this->plugin_id ) {
-	    Stack::add( 'admin_header_javascript',  URL::get_from_filesystem( __FILE__ ) . '/lib/swfobject-min.js', 'swfobject' );
-        }
+			$this->options = Options::get( self::OPTNAME );
+			if ( ! $this->options['compat'] ) {
+				Stack::add( 'admin_header_javascript',  URL::get_from_filesystem( __FILE__ ) . '/lib/swfobject-min.js', 'swfobject' );
+			}
+		}
     }
 
     /**
@@ -297,7 +300,10 @@ class HbCumulus extends Plugin
      */
     public function theme_header( $theme )
     {
-		Stack::add( 'template_header_javascript',  URL::get_from_filesystem( __FILE__ ) . '/lib/swfobject-min.js', 'swfobject' );
+		$this->options = Options::get( self::OPTNAME );
+		if ( ! $this->options['compat'] ) {
+			Stack::add( 'template_header_javascript',  URL::get_from_filesystem( __FILE__ ) . '/lib/swfobject-min.js', 'swfobject' );
+		}
     }
 
     /**
