@@ -512,31 +512,18 @@ class HbCumulus extends Plugin
     }
 
     /**
-     * Format post content. Calls HbCumulusFormat::hbcumulus.
-     *
-     * We use Format here instead of filter_post_content_out to ensure the code isn't actually replace
-     * until the page is displayed.  This prevents errors or the display of rubbish in the event the
-     * plugin is deactivated.
-     *
-     * @access public
-     * @return void
-     */
-    public function action_init()
-    {
-		Format::apply( 'hbcumulus', 'post_content_out' );
-    }
-
-    /**
      * Replace any instance of the <!-- hb-cumulus --> tag with the Flash tag cloud.
      *
      * @access public
      * @param string $content
      * @return string
      */
-    public function filter_hbcumulus ( $content)
+    public function filter_post_content_out ( $content )
     {
 		$this->options = Options::get( self::OPTNAME );
-		$content = ($this->options['inbody'] ) ? preg_replace( '/<!--\s*hb-cumulus\s*-->/i', $this->get_flashcode( 'post' ), $content ) : $content;
+		if ($this->options['inbody'] ) {
+			$content = preg_replace( '/<!--\s*hb-cumulus\s*-->/i', $this->get_flashcode( 'post' ), $content );
+		}
 		unset($this->options);
         return $content;
     }
@@ -555,11 +542,4 @@ class HbCumulus extends Plugin
 
 }
 
-class HbCumulusFormat extends Format
-{
-    public function hbcumulus( $content )
-    {
-		return Plugins::filter( 'hbcumulus', $content );
-    }
-}
 ?>
