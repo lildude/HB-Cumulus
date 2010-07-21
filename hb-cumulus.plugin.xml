@@ -3,10 +3,10 @@
     <name>HB-Cumulus</name>
     <license url="http://www.apache.org/licenses/LICENSE-2.0.html">Apache Software License 2.0</license>
 	<author url="http://colinseymour.co.uk">Colin Seymour</author>
-	<copyright>Copyright 2009</copyright>
-	<version>1.5</version>
-    <url>http://www.lildude.co.uk/projects/hb-cumulus</url>
-	<downloadurl>http://www.lildude.co.uk/projects/hb-audio-player</downloadurl>
+	<copyright>Copyright 2010</copyright>
+	<version>1.6</version>
+    <url>http://lildude.co.uk/projects/hb-cumulus</url>
+	<downloadurl>http://lildude.co.uk/projects/hb-audio-player</downloadurl>
     <description><![CDATA[Flash based Tag Cloud for Habari.]]></description>
     <guid>F7A0CCFC-C5DF-11DD-A399-37B955D89593</guid>
 	<help>
@@ -22,7 +22,8 @@
 		    <p>This tag is NOT case sensitive, so don\'t worry too much about the case or spacing. So long as you have all of the above characters in that order, it should display.</p></li>
 
 		    <li>In ANY theme file:<br />
-		    <p>You can show the cloud anywhere on your site within your theme files, for example in the sidebar using:<br />
+		    <p>If your theme has support for blocks, you can add the tag cloud to any of the blocks your theme supports.</p>
+			<p>If your theme does not have support for blocks, you can show the cloud anywhere on your site within your theme files, for example in the sidebar using:<br />
 		    <code>$theme-&gt;hbcumulus();</code>
 		    <br /></p>
 		    <p>This IS case sensitive, so you\'ll need to be sure you get it 100% correct.</p></li>

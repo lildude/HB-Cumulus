@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright 2009 Colin Seymour - http://www.lildude.co.uk/projects/hb-cumulus
+ * Copyright 2010 Colin Seymour - http://lildude.co.uk/projects/hb-cumulus
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,10 +22,10 @@
  * HB-Cumulus is a port of the very popular Wordpress version (WP-Cumulus) written by Roy Tanck.
  * 
  * @package HbCumulus
- * @version 1.5
+ * @version 1.6
  * @author Colin Seymour - http://colinseymour.co.uk
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache License 2.0 (unless otherwise stated)
- * @link http://www.lildude.co.uk/projects/hb-cumulus
+ * @link http://lildude.co.uk/projects/hb-cumulus
  */
 
 class HbCumulus extends Plugin
@@ -43,6 +43,14 @@ class HbCumulus extends Plugin
     {
 		Update::add( 'HB-Cumulus', 'F7A0CCFC-C5DF-11DD-A399-37B955D89593', $this->info->version );
     }
+
+	/**
+	 * On plugin init, add the template included with this plugin to the available templates in the theme
+	 */
+	public function action_init()
+	{
+		$this->add_template( 'block.hbcumulus', dirname(__FILE__) . '/block.hbcumulus.php' );
+	}
 
     /**
      * Plugin activation
@@ -539,6 +547,23 @@ class HbCumulus extends Plugin
     {
         return $this->get_flashcode( 'theme' );
     }
+
+	/**
+	 * Add hbcumulus block to the list of selectable blocks
+	 **/
+	public function filter_block_list( $block_list )
+	{
+		$block_list[ 'hbcumulus' ] = 'HB-Cumulus';
+		return $block_list;
+	}
+	
+	/**
+	 * Populate the block
+	 **/
+	public function action_block_content_hbcumulus( $block, $theme )
+	{
+		$block->hbcumulus = $this->get_flashcode( 'theme' );
+	}
 
 }
 

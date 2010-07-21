@@ -1,5 +1,5 @@
-Plugin: HB-Cumulus 1.5
-URL: http://www.lildude.co.uk/projects/hb-cumulus
+Plugin: HB-Cumulus 1.6
+URL: http://lildude.co.uk/projects/hb-cumulus
 Plugin Author: Colin Seymour - http://colinseymour.co.uk
 Credit goes to: Roy Tanck for the original WP-Cumulus plugin and Geoff Stearns for
 swfobject as used by Roy's work.
@@ -68,6 +68,10 @@ There are two ways you can use HB-Cumulus:
 
    2. In ANY theme file:
 
+	  If your theme has support for blocks, you can add the tag cloud to any of
+      the blocks your theme supports.
+
+      If your theme does not have support for blocks or you don't with to use them,
       You can show the cloud anywhere on your site within your theme files, for
       example in the sidebar using:
 
@@ -107,6 +111,7 @@ There are a couple of things worth noting for reference purposes:
 REVISION HISTORY
 ----------------
 
+1.6 - Added block support for Habari 0.7
 1.5	- Updated tagcloud.swf to that provided with WP-Cumulus 1.23
 	- Updated swfobject to version 2.2
 	- Improved HTML validity
