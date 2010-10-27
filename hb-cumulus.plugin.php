@@ -33,17 +33,6 @@ class HbCumulus extends Plugin
     private $options = array();
     const OPTNAME = 'hb-cumulus__options';
 
-    /**
-     * Beacon Support for Update checking
-     *
-     * @access public
-     * @return void
-     **/
-    public function action_update_check()
-    {
-		Update::add( 'HB-Cumulus', 'F7A0CCFC-C5DF-11DD-A399-37B955D89593', $this->info->version );
-    }
-
 	/**
 	 * On plugin init, add the template included with this plugin to the available templates in the theme
 	 */
