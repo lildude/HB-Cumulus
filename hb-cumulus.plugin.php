@@ -109,9 +109,7 @@ class HbCumulus extends Plugin
      */
     public function filter_plugin_config( $actions, $plugin_id )
     {
-		if ( $plugin_id == $this->plugin_id() ) {
-			$actions[]= _t( 'Configure' );
-		}
+		$actions['configure']= _t( 'Configure' );
 		return $actions;
     }
 
@@ -124,62 +122,56 @@ class HbCumulus extends Plugin
      * @param string $action
      * @return void
      */
-    public function action_plugin_ui( $plugin_id, $action )
+    public function action_plugin_ui_configure( $plugin_id, $action )
     {
-		if ( $plugin_id == $this->plugin_id() ) {
-			switch ( $action ) {
-			case _t( 'Configure' ):
-				$this->options = Options::get( self::OPTNAME );
-					$ui= new FormUI( strtolower( __CLASS__ ) );
-					$ui->append( 'hidden', 'option_mode', 'null:null' );
-					$ui->option_mode->value = $this->options['mode'];
-					$ui->append( 'text', 'options_width', 'null:null', _t( 'Width of Flash Tag Cloud (px)' ), 'optionscontrol_text' );
-					$ui->options_width->value = $this->options['width'];
-					$ui->options_width->add_validator( 'validate_heightWidth' );
-					$ui->append( 'text', 'options_height', 'null:null', _t( 'Height of Flash Tag Cloud (px)' ), 'optionscontrol_text' );
-					$ui->options_height->value = $this->options['height'];
-					$ui->options_height->add_validator( 'validate_heightWidth' );
-					$ui->append( 'text', 'options_tcolor', 'null:null', _t( 'Color of the Tags' ), 'optionscontrol_text' );
-					$ui->options_tcolor->value = $this->options['tcolor'];
-					$ui->options_tcolor->add_validator( 'validate_color' );
-					$ui->append( 'text', 'options_tcolor2', 'null:null', _t( 'Second Color for Gradient (opt)' ), 'optionscontrol_text' );
-					$ui->options_tcolor2->value = $this->options['tcolor2'];
-					$ui->append( 'text', 'options_hicolor', 'null:null', _t( 'Highlight Color (opt)' ), 'optionscontrol_text' );
-					$ui->options_hicolor->value = $this->options['hicolor'];
-					$ui->append( 'text', 'options_bgcolor', 'null:null', _t( 'Background Color' ), 'optionscontrol_text' );
-					$ui->options_bgcolor->value = $this->options['bgcolor'];
-					$ui->options_bgcolor->add_validator( 'validate_color' );
-					$ui->append( 'text', 'options_speed', 'null:null', _t( 'Rotation Speed' ), 'optionscontrol_text' );
-					$ui->options_speed->value = $this->options['speed'];
-					$ui->append( 'text', 'options_hide', 'null:null', _t( 'Tag(s) to be Hidden' ), 'optionscontrol_text' );
-					$ui->options_hide->value = $this->options['hide'];
-					$ui->append( 'text', 'options_minfont', 'null:null', _t( 'Minimum Font Size (pt)' ), 'optionscontrol_text' );
-					$ui->options_minfont->value = $this->options['minfont'];
-					$ui->append( 'text', 'options_maxfont', 'null:null', _t( 'Maximum Font Size (pt)' ), 'optionscontrol_text' );
-					$ui->options_maxfont->value = $this->options['maxfont'];
-					$ui->append( 'text', 'options_number', 'null:null', _t( 'Number of Tags to Show' ), 'optionscontrol_text' );
-					$ui->options_number->value = $this->options['number'];
-					$ui->append( 'checkbox', 'options_inbody', 'null:null', _t( 'Using in Posts/Pages' ), 'optionscontrol_checkbox' );
-					$ui->options_inbody->value = $this->options['inbody'];
-					$ui->options_inbody->helptext = _t( 'Only check this box if you are using the &lt;!-- hb-cumulus --&gt; tag to insert the tag cloud into individual posts or pages.' );
-					$ui->append( 'checkbox', 'options_trans', 'null:null', _t( 'Use Transparent Mode' ), 'optionscontrol_checkbox' );
-					$ui->options_trans->value = $this->options['trans'];
-					$ui->append( 'checkbox', 'options_distr', 'null:null', _t( 'Distribute Tags Evenly' ), 'optionscontrol_checkbox' );
-					$ui->options_distr->value = $this->options['distr'];
-					$ui->append( 'checkbox', 'options_showhtml', 'null:null', _t( 'Show HTML Tag Cloud' ), 'optionscontrol_checkbox' );
-					$ui->options_showhtml->value = $this->options['showhtml'];
-					$ui->options_showhtml->helptext = _t( 'Display HTML tag cloud in the event the Flash cloud can\'t be.  <b>Warning:</b> due to the way autop() currently works, you may see the HTML tag when using HB Cumulus in a post or page with compatibility mode enabled.' );
-					$ui->append( 'checkbox', 'options_compat', 'null:null', _t( 'Compatibility Mode' ), 'optionscontrol_checkbox' );
-					$ui->options_compat->value = $this->options['compat'];
-					$ui->options_compat->helptext = _t( 'Enabling this option switches to using a method of embedding Flash into the page that does not use Javascript. Use this if your page has markup errors or if you\'re having trouble getting HB-Cumulus to display correctly, or you just don\'t to load another Javascript file.' );
-					$ui->append( 'submit', 'submit', _t( 'Save Options' ) );
-				$ui->on_success ( array( $this, 'storeOpts' ) );
-				$form_output = $ui->get();
-				echo '<div style="width: 300px; float: right; margin: 10px 25px;"><label style="display:block">'._t( 'Preview' ).'</label>'.$this->get_flashcode( 'config', TRUE ).'</div>';
-				echo $form_output;
-				break;
-			}
-		}
+		$this->options = Options::get( self::OPTNAME );
+			$ui= new FormUI( strtolower( __CLASS__ ) );
+			$ui->append( 'hidden', 'option_mode', 'null:null' );
+			$ui->option_mode->value = $this->options['mode'];
+			$ui->append( 'text', 'options_width', 'null:null', _t( 'Width of Flash Tag Cloud (px)' ), 'optionscontrol_text' );
+			$ui->options_width->value = $this->options['width'];
+			$ui->options_width->add_validator( 'validate_heightWidth' );
+			$ui->append( 'text', 'options_height', 'null:null', _t( 'Height of Flash Tag Cloud (px)' ), 'optionscontrol_text' );
+			$ui->options_height->value = $this->options['height'];
+			$ui->options_height->add_validator( 'validate_heightWidth' );
+			$ui->append( 'text', 'options_tcolor', 'null:null', _t( 'Color of the Tags' ), 'optionscontrol_text' );
+			$ui->options_tcolor->value = $this->options['tcolor'];
+			$ui->options_tcolor->add_validator( 'validate_color' );
+			$ui->append( 'text', 'options_tcolor2', 'null:null', _t( 'Second Color for Gradient (opt)' ), 'optionscontrol_text' );
+			$ui->options_tcolor2->value = $this->options['tcolor2'];
+			$ui->append( 'text', 'options_hicolor', 'null:null', _t( 'Highlight Color (opt)' ), 'optionscontrol_text' );
+			$ui->options_hicolor->value = $this->options['hicolor'];
+			$ui->append( 'text', 'options_bgcolor', 'null:null', _t( 'Background Color' ), 'optionscontrol_text' );
+			$ui->options_bgcolor->value = $this->options['bgcolor'];
+			$ui->options_bgcolor->add_validator( 'validate_color' );
+			$ui->append( 'text', 'options_speed', 'null:null', _t( 'Rotation Speed' ), 'optionscontrol_text' );
+			$ui->options_speed->value = $this->options['speed'];
+			$ui->append( 'text', 'options_hide', 'null:null', _t( 'Tag(s) to be Hidden' ), 'optionscontrol_text' );
+			$ui->options_hide->value = $this->options['hide'];
+			$ui->append( 'text', 'options_minfont', 'null:null', _t( 'Minimum Font Size (pt)' ), 'optionscontrol_text' );
+			$ui->options_minfont->value = $this->options['minfont'];
+			$ui->append( 'text', 'options_maxfont', 'null:null', _t( 'Maximum Font Size (pt)' ), 'optionscontrol_text' );
+			$ui->options_maxfont->value = $this->options['maxfont'];
+			$ui->append( 'text', 'options_number', 'null:null', _t( 'Number of Tags to Show' ), 'optionscontrol_text' );
+			$ui->options_number->value = $this->options['number'];
+			$ui->append( 'checkbox', 'options_inbody', 'null:null', _t( 'Using in Posts/Pages' ), 'optionscontrol_checkbox' );
+			$ui->options_inbody->value = $this->options['inbody'];
+			$ui->options_inbody->helptext = _t( 'Only check this box if you are using the &lt;!-- hb-cumulus --&gt; tag to insert the tag cloud into individual posts or pages.' );
+			$ui->append( 'checkbox', 'options_trans', 'null:null', _t( 'Use Transparent Mode' ), 'optionscontrol_checkbox' );
+			$ui->options_trans->value = $this->options['trans'];
+			$ui->append( 'checkbox', 'options_distr', 'null:null', _t( 'Distribute Tags Evenly' ), 'optionscontrol_checkbox' );
+			$ui->options_distr->value = $this->options['distr'];
+			$ui->append( 'checkbox', 'options_showhtml', 'null:null', _t( 'Show HTML Tag Cloud' ), 'optionscontrol_checkbox' );
+			$ui->options_showhtml->value = $this->options['showhtml'];
+			$ui->options_showhtml->helptext = _t( 'Display HTML tag cloud in the event the Flash cloud can\'t be.  <b>Warning:</b> due to the way autop() currently works, you may see the HTML tag when using HB Cumulus in a post or page with compatibility mode enabled.' );
+			$ui->append( 'checkbox', 'options_compat', 'null:null', _t( 'Compatibility Mode' ), 'optionscontrol_checkbox' );
+			$ui->options_compat->value = $this->options['compat'];
+			$ui->options_compat->helptext = _t( 'Enabling this option switches to using a method of embedding Flash into the page that does not use Javascript. Use this if your page has markup errors or if you\'re having trouble getting HB-Cumulus to display correctly, or you just don\'t to load another Javascript file.' );
+			$ui->append( 'submit', 'submit', _t( 'Save Options' ) );
+		$ui->on_success ( array( $this, 'storeOpts' ) );
+		$form_output = $ui->get();
+		echo '<div style="width: 300px; float: right; margin: 10px 25px;"><label style="display:block">'._t( 'Preview' ).'</label>'.$this->get_flashcode( 'config', TRUE ).'</div>';
+		echo $form_output;
     }
 
     /**
