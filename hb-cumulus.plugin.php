@@ -122,7 +122,7 @@ class HbCumulus extends Plugin
      * @param string $action
      * @return void
      */
-    public function action_plugin_ui_configure( $plugin_id, $action )
+    public function action_plugin_ui_configure()
     {
 		$this->options = Options::get( self::OPTNAME );
 			$ui= new FormUI( strtolower( __CLASS__ ) );
