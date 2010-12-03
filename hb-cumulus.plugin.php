@@ -463,8 +463,8 @@ class HbCumulus extends Plugin
 		$limit = ( empty( $num_tag ) ) ? '' : "LIMIT {$num_tag}";
 
 		$hide_tags = self::get_hide_tag_list();
-		$total_tag_cnt = Tags::count_total();
-		$most_popular_tag_cnt = Tags::max_count();
+		$total_tag_cnt = Tags::vocabulary()->count_total();
+		$most_popular_tag_cnt = Tags::vocabulary()->max_count();
 		$vocab_id = Tags::vocabulary()->id;
 
 		$sql = "
