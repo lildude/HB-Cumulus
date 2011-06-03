@@ -1,4 +1,4 @@
-Plugin: HB-Cumulus 1.6
+Plugin: HB-Cumulus 1.7
 URL: http://lildude.co.uk/projects/hb-cumulus
 Plugin Author: Colin Seymour - http://colinseymour.co.uk
 Credit goes to: Roy Tanck for the original WP-Cumulus plugin and Geoff Stearns for
@@ -111,6 +111,8 @@ There are a couple of things worth noting for reference purposes:
 REVISION HISTORY
 ----------------
 
+1.7 - Improved compatibility with new Habari 0.7 form configuration forms.
+	- Fixed calling a non-static method statically.  This issue came to light due to a change in the underlying Vocabulary code in Habari.
 1.6 - Added block support for Habari 0.7
 1.5	- Updated tagcloud.swf to that provided with WP-Cumulus 1.23
 	- Updated swfobject to version 2.2
