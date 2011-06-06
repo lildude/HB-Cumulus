@@ -229,6 +229,18 @@ class HbCumulus extends Plugin
         }
         return array();
     }
+	
+	/**
+	 * Clear cache when post status changes
+	 * 
+	 * @access public
+	 */
+	public function action_post_update_status()
+	{
+		// TODO - Find a way to detect all caches.  I might need to use a group.
+		Cache::expire( array( __CLASS__ ), 'glob' );
+	}
+
 
      /**
       * Add custom CSS information to "Configure" page
