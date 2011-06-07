@@ -260,6 +260,7 @@ class HbCumulus extends Plugin
 				'action_post_update_status'
 			),
 			'action_tag_update_after' => array(
+				'action_tag_insert_after',	// Not needed at the moment as the only interface for adding tags is via Posts.
 				'action_tag_delete_after'
 			)
 		);
