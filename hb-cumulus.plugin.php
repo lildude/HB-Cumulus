@@ -238,7 +238,7 @@ class HbCumulus extends Plugin
 	public function action_post_update_status()
 	{
 		// TODO - Find a way to detect all caches.  I might need to use a group.
-		Cache::expire( array( __CLASS__ ), 'glob' );
+		Cache::expire( array( __CLASS__, '*' ), 'glob' );
 	}
 
 
