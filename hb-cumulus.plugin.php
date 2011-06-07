@@ -22,10 +22,11 @@
  * HB-Cumulus is a port of the very popular Wordpress version (WP-Cumulus) written by Roy Tanck.
  * 
  * @package HbCumulus
- * @version 1.7
+ * @version 1.8
  * @author Colin Seymour - http://colinseymour.co.uk
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache License 2.0 (unless otherwise stated)
  * @link http://lildude.co.uk/projects/hb-cumulus
+ * @todo Add fallback to JS only version like http://wordpress.org/extend/plugins/wp-cirrus/ if flash disabled.
  */
 
 class HbCumulus extends Plugin
@@ -231,15 +232,39 @@ class HbCumulus extends Plugin
     }
 	
 	/**
-	 * Clear cache when post status changes
+	 * Clear cache when posts and tags are created, updated or deleted.
 	 * 
 	 * @access public
 	 */
-	public function action_post_update_status()
+	public function action_post_update_after()
 	{
-		// TODO - Find a way to detect all caches.  I might need to use a group.
 		Cache::expire( array( __CLASS__, '*' ), 'glob' );
 	}
+	
+	public function action_tag_update_after()
+	{
+		Cache::expire( array( __CLASS__, '*' ), 'glob' );
+	}
+	
+	/**
+	 * alias action methods to reduce the amount of code needed.
+	 * 
+	 * @access public
+	 */
+	public function alias()
+	{
+		return array(
+			'action_post_update_after' => array(
+				'action_post_insert_after',
+				'action_post_delete_after',
+				'action_post_update_status'
+			),
+			'action_tag_update_after' => array(
+				'action_tag_delete_after'
+			)
+		);
+	}
+
 
 
      /**
