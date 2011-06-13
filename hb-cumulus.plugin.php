@@ -51,39 +51,37 @@ class HbCumulus extends Plugin
      */
     public function action_plugin_activation( $file )
     {
-		if( Plugins::id_from_file( $file ) == Plugins::id_from_file( __FILE__ ) ) {
-				$defOptions = array(
-					'width' => '250',
-					'height' => '250',
-					'tcolor' => 'FFFFFF',
-					'tcolor2' => 'FFFFFF',
-					'hicolor' => 'FFFFFF',
-					'bgcolor' => '333333',
-					'speed' => '100',
-					'trans' => FALSE,
-					'distr' => FALSE,
-					'hide' => '',
-					'mode' => 'tags',
-					'minfont' => '8',
-					'maxfont' => '25',
-					'number' => '30',
-					'compat' => FALSE,
-					'showhtml' => TRUE,
-					'inbody' => FALSE,
-				);
+		$defOptions = array(
+			'width' => '250',
+			'height' => '250',
+			'tcolor' => 'FFFFFF',
+			'tcolor2' => 'FFFFFF',
+			'hicolor' => 'FFFFFF',
+			'bgcolor' => '333333',
+			'speed' => '100',
+			'trans' => FALSE,
+			'distr' => FALSE,
+			'hide' => '',
+			'mode' => 'tags',
+			'minfont' => '8',
+			'maxfont' => '25',
+			'number' => '30',
+			'compat' => FALSE,
+			'showhtml' => TRUE,
+			'inbody' => FALSE,
+		);
 
-				$this->options = Options::get( self::OPTNAME );
+		$this->options = Options::get( self::OPTNAME );
 
-			if ( empty( $this->options ) ) {
-				Options::set( self::OPTNAME, $defOptions );
-			}
-			else if ( count( $this->options ) != count( $defOptions ) ) {
-				Options::set( self::OPTNAME, array_merge( $defOptions, $this->options ) );
-			}
-			else {
-				Session::notice( _t( 'Using previous HB-Cumulus options' ) );
-			}
-	    }
+		if ( empty( $this->options ) ) {
+			Options::set( self::OPTNAME, $defOptions );
+		}
+		else if ( count( $this->options ) != count( $defOptions ) ) {
+			Options::set( self::OPTNAME, array_merge( $defOptions, $this->options ) );
+		}
+		else {
+			Session::notice( _t( 'Using previous HB-Cumulus options' ) );
+		}
 	}
 
     /**
@@ -95,9 +93,7 @@ class HbCumulus extends Plugin
      */
     public function action_plugin_deactivation( $file )
     {
-        if ( realpath( $file ) == __FILE__ ) {
-            //Options::delete(self::OPTNAME);
-        }
+
     }
 
     /**
