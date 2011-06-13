@@ -4,7 +4,7 @@
     <license url="http://www.apache.org/licenses/LICENSE-2.0.html">Apache Software License 2.0</license>
 	<author url="http://colinseymour.co.uk">Colin Seymour</author>
 	<copyright>Copyright 2010</copyright>
-	<version>1.7</version>
+	<version>1.8</version>
     <url>http://lildude.co.uk/projects/hb-cumulus</url>
 	<downloadurl>http://lildude.co.uk/projects/hb-cumulus</downloadurl>
     <description><![CDATA[Flash based Tag Cloud for Habari.]]></description>
