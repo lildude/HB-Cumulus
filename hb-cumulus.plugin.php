@@ -344,7 +344,7 @@ class HbCumulus extends Plugin
 		if ( Cache::has( array( __CLASS__ , $class ) ) && !Cache::expired( array( __CLASS__ , $class ) ) && ( file_exists( FILE_CACHE_LOCATION . 'tagcloud.swf' ) ) ) {
 			$flashtag = Cache::get( array( __CLASS__ , $class ) );
 		} else {
-			// Download the tagcloud.swf if it doesn't exist
+			// Download the tagcloud.swf if it doesn't exist. We download it locally as hotlinking is not nice.
 			if ( ! file_exists( FILE_CACHE_LOCATION . 'tagcloud.swf' ) ) {
 				$rr = new RemoteRequest( $this->tagswf_url );
 				if ( Error::is_error( $rr->execute() ) ) {

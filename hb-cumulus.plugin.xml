@@ -27,6 +27,7 @@
 		    <code>$theme-&gt;hbcumulus();</code>
 		    <br /></p>
 		    <p>This IS case sensitive, so you\'ll need to be sure you get it 100% correct.</p></li>
-		    </ol></p>]]></value>
+		    </ol></p>
+			<p>Please ensure your Habari cache directory is writeable by your webserver.</p>]]></value>
 	</help>
 </pluggable>
