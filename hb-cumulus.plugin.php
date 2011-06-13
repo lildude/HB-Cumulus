@@ -307,7 +307,7 @@ class HbCumulus extends Plugin
         if ( Controller::get_var( 'configure' ) == $this->plugin_id ) {
 			$this->options = Options::get( self::OPTNAME );
 			if ( ! $this->options['compat'] ) {
-				Stack::add( 'admin_header_javascript',  URL::get_from_filesystem( __FILE__ ) . '/lib/swfobject-min.js', 'swfobject' );
+				Stack::add( 'admin_header_javascript',  'http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js', 'swfobject' );
 			}
 		}
     }
@@ -398,7 +398,7 @@ class HbCumulus extends Plugin
 				$flashtag .= '&amp;mode='.$this->options['mode'];
 				// put tags in flashvar
 				if( $this->options['mode'] != "cats" ){
-					$flashtag .= '&amp;tagcloud='.urlencode('<tags>') . $tagcloud . urlencode('</tags>');
+					$flashtag .= '&amp;tagcloud='.urlencode( '<tags>' ) . $tagcloud . urlencode( '</tags>' );
 				}
 
 				$flashtag .= '" />';
@@ -406,7 +406,7 @@ class HbCumulus extends Plugin
 				if ( ! $this->options['showhtml'] ) {
 					$flashtag .= ' style="display:none;"';
 				}
-				$flashtag .= '>'. urldecode($tagcloud);
+				$flashtag .= '>'. urldecode( $tagcloud );
 				$flashtag .= '</span>';
 				$flashtag .= '<!--[if !IE]>-->';
 				$flashtag .= '</object>';
@@ -419,14 +419,14 @@ class HbCumulus extends Plugin
 				// Using swfobject "dynamic" method
 				// Construct the Javascript
 				$flashVars = 'tcolor:"0x'.$this->options['tcolor'].'"';
-				$flashVars .= ',tcolor2:"0x' . ($this->options['tcolor2'] == "" ? $this->options['tcolor'] : $this->options['tcolor2']) . '"';
-				$flashVars .= ',hicolor:"0x' . ($this->options['hicolor'] == "" ? $this->options['tcolor'] : $this->options['hicolor']) . '"';
+				$flashVars .= ',tcolor2:"0x' . ( $this->options['tcolor2'] == "" ? $this->options['tcolor'] : $this->options['tcolor2'] ) . '"';
+				$flashVars .= ',hicolor:"0x' . ( $this->options['hicolor'] == "" ? $this->options['tcolor'] : $this->options['hicolor'] ) . '"';
 				$flashVars .= ',tspeed:"'.$this->options['speed'].'"';
 				$flashVars .= ',distr:"'.$this->options['distr'].'"';
 				$flashVars .= ',mode:"'.$this->options['mode'].'"';
 
 				if( $this->options['mode'] != "cats" ){
-					$flashVars .= ',tagcloud:"'.urlencode('<tags>') . $tagcloud . urlencode('</tags>').'"';
+					$flashVars .= ',tagcloud:"'.urlencode( '<tags>' ) . $tagcloud . urlencode( '</tags>' ).'"';
 				}
 
 				$params = 'menu:false,bgcolor:"'.$this->options['bgcolor'].'",allowScriptAccess:"always"';
@@ -443,7 +443,7 @@ class HbCumulus extends Plugin
 				if ( ! $this->options['showhtml'] ) {
 					$flashtag .= ' style="display:none;"';
 				}
-				$flashtag .= '>'. urldecode($tagcloud);
+				$flashtag .= '>'. urldecode( $tagcloud );
 				$flashtag .= '</span>';
 			}
 			Cache::set( array( __CLASS__ , $class ), $flashtag, 86400 ); // 24 hours
