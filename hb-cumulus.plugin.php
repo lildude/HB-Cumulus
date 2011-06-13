@@ -205,10 +205,10 @@ class HbCumulus extends Plugin
      */
     public function filter_validate_heightWidth( $valid, $value )
     {
-	if ( empty( $value ) || !intval( $value ) || intval( $value ) <= 0 ) {
-	    return array( _t( "An integer value greater than 0 is required." ) );
-	}
-	return array();
+		if ( empty( $value ) || !intval( $value ) || intval( $value ) <= 0 ) {
+			return array( _t( "An integer value greater than 0 is required." ) );
+		}
+		return array();
     }
 
      /**
