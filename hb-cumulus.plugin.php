@@ -32,6 +32,7 @@
 class HbCumulus extends Plugin
 {
     private $options = array();
+	private $tagswf_url = 'http://plugins.svn.wordpress.org/wp-cumulus/tags/1.23/tagcloud.swf';
     const OPTNAME = 'hb-cumulus__options';
 
 	/**
@@ -339,10 +340,21 @@ class HbCumulus extends Plugin
      */
     private function get_flashcode( $class = '', $config = FALSE )
     {
-		// Cache so we don't have to keep querying the DB.
-		if ( Cache::has( array( __CLASS__ , $class ) ) && !Cache::expired( array( __CLASS__ , $class ) ) ) {
+		// Cache so we don't have to keep querying the DB or downloading the tagcloud.swf file.
+		if ( Cache::has( array( __CLASS__ , $class ) ) && !Cache::expired( array( __CLASS__ , $class ) ) && ( file_exists( FILE_CACHE_LOCATION . 'tagcloud.swf' ) ) ) {
 			$flashtag = Cache::get( array( __CLASS__ , $class ) );
 		} else {
+			// Download the tagcloud.swf if it doesn't exist
+			if ( ! file_exists( FILE_CACHE_LOCATION . 'tagcloud.swf' ) ) {
+				$rr = new RemoteRequest( $this->tagswf_url );
+				if ( Error::is_error( $rr->execute() ) ) {
+                        throw new Exception( 'Could not fetch tagcloud.swf at ' . $this->tagswf_url );
+                }
+				$file = FILE_CACHE_LOCATION . 'tagcloud.swf';
+				if ( ! file_put_contents( $file, $rr->get_response_body(), LOCK_EX ) ) {
+                        throw new Exception( 'Please make the directory ' . dirname( $file ) . ' writeable by the server' );
+                }
+			}
 			$this->options = Options::get( self::OPTNAME );
 			$flashtag = '';
 			if ( $config ) {
@@ -361,7 +373,8 @@ class HbCumulus extends Plugin
 			ob_start();
 			echo self::build_tag_cloud( $this->options['number'] );
 			$tagcloud = urlencode( str_replace( "&nbsp;", " ", ob_get_clean() ) );
-			$movie =  $this->get_url() .'/lib/tagcloud.swf';
+			//$movie =  $this->get_url() .'/lib/tagcloud.swf';
+			$movie = Site::get_url( 'habari' ).'/user/cache/tagcloud.swf';
 			if ( $this->options['compat'] ) {
 				// Non-JS method
 				$flashtag = '<!--[if IE]>';
