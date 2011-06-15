@@ -113,7 +113,7 @@ REVISION HISTORY
 
 1.8 - Clear cache whenever an entry or tag is created, updated or deleted.
 	- Call the swfobject.js from Google's hosting if users choose this method to render the cloud.
-	- HB-Cumulus now downloads the tagcloud.swf files directly from the WP-Cumulus SVN repository so it doesn't need to be bundled anymore.
+	- HB-Cumulus now downloads the tagcloud.swf file directly from the WP-Cumulus SVN repository so it doesn't need to be bundled anymore.
 1.7 - Improved compatibility with new Habari 0.7 form configuration forms.
 	- Fixed calling a non-static method statically.  This issue came to light due to a change in the underlying Vocabulary code in Habari.
 1.6 - Added block support for Habari 0.7
