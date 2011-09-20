@@ -22,7 +22,7 @@
  * HB-Cumulus is a port of the very popular Wordpress version (WP-Cumulus) written by Roy Tanck.
  * 
  * @package HbCumulus
- * @version 1.8
+ * @version 1.9
  * @author Colin Seymour - http://colinseymour.co.uk
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache License 2.0 (unless otherwise stated)
  * @link http://lildude.co.uk/projects/hb-cumulus
@@ -276,16 +276,9 @@ class HbCumulus extends Plugin
     {
         if ( Controller::get_var( 'configure' ) == $this->plugin_id ) {
             $output = '<style type="text/css">';
-            if ( Version::HABARI_VERSION == '0.5.2' ) {
-                $output .= 'form#hbcumulus .formcontrol {line-height:24px; height:30px}';
-                $output .= 'form#hbcumulus #save input {float:none}';
-                $output .= 'form#hbcumulus p.error {background:none !important; border:none !important; margin-bottom:0 !important; padding:0 !important}';
-            }
-			else {
-                $output .= 'form#hbcumulus .formcontrol {line-height:24px; height:18px}';
-                $output .= 'form#hbcumulus .helptext {line-height: 13px; padding-left: 20px}';
-                $output .= 'form#hbcumulus #submit { clear: both}';
-            }
+			$output .= 'form#hbcumulus .formcontrol {line-height:24px; height:18px}';
+			$output .= 'form#hbcumulus .helptext {line-height: 13px; padding-left: 20px}';
+			$output .= 'form#hbcumulus #submit { clear: both}';
             $output .= 'form#hbcumulus span.pct25 select {width:85%}';
             $output .= 'form#hbcumulus span.pct25 {text-align:right}';
             $output .= 'form#hbcumulus span.pct5 input {margin-left:25px}';
@@ -340,21 +333,10 @@ class HbCumulus extends Plugin
      */
     private function get_flashcode( $class = '', $config = FALSE )
     {
-		// Cache so we don't have to keep querying the DB or downloading the tagcloud.swf file.
-		if ( Cache::has( array( __CLASS__ , $class ) ) && !Cache::expired( array( __CLASS__ , $class ) ) && ( file_exists( FILE_CACHE_LOCATION . 'tagcloud.swf' ) ) ) {
+		// Cache so we don't have to keep querying the DB
+		if ( Cache::has( array( __CLASS__ , $class ) ) && !Cache::expired( array( __CLASS__ , $class ) ) ) {
 			$flashtag = Cache::get( array( __CLASS__ , $class ) );
 		} else {
-			// Download the tagcloud.swf if it doesn't exist. We download it locally as hotlinking is not nice.
-			if ( ! file_exists( FILE_CACHE_LOCATION . 'tagcloud.swf' ) ) {
-				$rr = new RemoteRequest( $this->tagswf_url );
-				if ( Error::is_error( $rr->execute() ) ) {
-                        throw new Exception( 'Could not fetch tagcloud.swf at ' . $this->tagswf_url );
-                }
-				$file = FILE_CACHE_LOCATION . 'tagcloud.swf';
-				if ( ! file_put_contents( $file, $rr->get_response_body(), LOCK_EX ) ) {
-                        throw new Exception( 'Please make the directory ' . dirname( $file ) . ' writeable by the server' );
-                }
-			}
 			$this->options = Options::get( self::OPTNAME );
 			$flashtag = '';
 			if ( $config ) {
@@ -373,8 +355,8 @@ class HbCumulus extends Plugin
 			ob_start();
 			echo self::build_tag_cloud( $this->options['number'] );
 			$tagcloud = urlencode( str_replace( "&nbsp;", " ", ob_get_clean() ) );
-			//$movie =  $this->get_url() .'/lib/tagcloud.swf';
-			$movie = Site::get_url( 'habari' ).'/user/cache/tagcloud.swf';
+			$movie =  $this->get_url() .'/lib/tagcloud.swf';
+			//$movie = Site::get_url( 'habari' ).'/user/cache/tagcloud.swf';
 			if ( $this->options['compat'] ) {
 				// Non-JS method
 				$flashtag = '<!--[if IE]>';
