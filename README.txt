@@ -109,7 +109,8 @@ There are a couple of things worth noting for reference purposes:
           o Number of Tags to show: 30 - set to 0 or nothing to show all tags
 
       More information about the options marked with * can be found on the WP-Cumulus notes page.
-    * Hb-Cumulus will work with Habari 0.6.2 and the latest SVN code.
+    * Hb-Cumulus will work with Habari 0.7 and later.  It'll probably work with earlier 
+      releases too, but this is no longer supported..
     * Habari has no concept of categories at the moment, so it'll only show tags.
       If and when Habari gets categories, I'll update the plugin to support categories too.
 
