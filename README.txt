@@ -1,4 +1,4 @@
-Plugin: HB-Cumulus 1.8
+Plugin: HB-Cumulus 1.9
 URL: http://lildude.co.uk/projects/hb-cumulus
 Plugin Author: Colin Seymour - http://colinseymour.co.uk
 Credit goes to: Roy Tanck for the original WP-Cumulus plugin and Geoff Stearns for
@@ -29,6 +29,10 @@ Functionality includes the ability to set...
 the cloud within the configuration section so you can see your changes taking effect
 as you save them.
 
+At this time, HB-Cumulus is the ONLY port of Roy's WP-Cumulus that is NOT vulnerable to the
+HTML Injection vulnerability detailed at http://seclists.org/fulldisclosure/2011/Sep/101 as
+I've fixed it.
+
 
 INSTALLATION
 ------------
@@ -53,9 +57,14 @@ of encountering errors.
 USAGE
 -----
 
-There are two ways you can use HB-Cumulus:
+There are three ways you can use HB-Cumulus:
 
-   1. In ANY page or post:
+   1. Using Blocks:
+
+	  You can show the tag cloud in any area offered by your theme by adding the 
+      HB-Cumulus block to that area within the Theme configuration.
+
+   2. Embed directly into any page or post:
 
       You can show the cloud in any page or post by putting the following code into
       the post/page content:
@@ -66,10 +75,7 @@ There are two ways you can use HB-Cumulus:
       spacing. So long as you have all of the above characters in that order, it
       should display.
 
-   2. In ANY theme file:
-
-	  If your theme has support for blocks, you can add the tag cloud to any of
-      the blocks your theme supports.
+   2. Via the your theme files directly:
 
       If your theme does not have support for blocks or you don't with to use them,
       You can show the cloud anywhere on your site within your theme files, for
@@ -111,6 +117,10 @@ There are a couple of things worth noting for reference purposes:
 REVISION HISTORY
 ----------------
 
+1.9 - Revert back to using a HB-Cumulus specific tagcloud.swf file as HB-Cumulus
+      to resolve the mild HTML Injection vulnerability detailed at http://seclists.org/fulldisclosure/2011/Sep/101
+    - Updated help documentation to list all implementation methods
+	- Removed redundant code.
 1.8 - Clear cache whenever an entry or tag is created, updated or deleted.
 	- Call the swfobject.js from Google's hosting if users choose this method to render the cloud.
 	- HB-Cumulus now downloads the tagcloud.swf file directly from the WP-Cumulus SVN repository so it doesn't need to be bundled anymore.
