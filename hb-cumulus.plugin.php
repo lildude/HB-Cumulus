@@ -22,7 +22,7 @@
  * HB-Cumulus is a port of the very popular Wordpress version (WP-Cumulus) written by Roy Tanck.
  * 
  * @package HbCumulus
- * @version 1.9
+ * @version 2.0
  * @author Colin Seymour - http://colinseymour.co.uk
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache License 2.0 (unless otherwise stated)
  * @link http://lildude.co.uk/projects/hb-cumulus
@@ -32,7 +32,6 @@
 class HbCumulus extends Plugin
 {
     private $options = array();
-	private $tagswf_url = 'http://plugins.svn.wordpress.org/wp-cumulus/tags/1.23/tagcloud.swf';
     const OPTNAME = 'hb-cumulus__options';
 
 	/**
@@ -70,6 +69,7 @@ class HbCumulus extends Plugin
 			'compat' => FALSE,
 			'showhtml' => TRUE,
 			'inbody' => FALSE,
+			'html5' => TRUE,
 		);
 
 		$this->options = Options::get( self::OPTNAME );
@@ -126,6 +126,9 @@ class HbCumulus extends Plugin
 			$ui= new FormUI( strtolower( __CLASS__ ) );
 			$ui->append( 'hidden', 'option_mode', 'null:null' );
 			$ui->option_mode->value = $this->options['mode'];
+			$ui->append( 'checkbox', 'options_html5', 'null:null', _t( 'Use HTML5 TagCloud by default?' ), 'optionscontrol_checkbox');
+			$ui->options_html5->value = $this->options['html5'];
+			$ui->options_html5->helptext = _t( "The HTML5 tagcloud is the default with the Flash cloud acting as a fallback for those browers that don't support HTML5 or the canvas element." );
 			$ui->append( 'text', 'options_width', 'null:null', _t( 'Width of Flash Tag Cloud (px)' ), 'optionscontrol_text' );
 			$ui->options_width->value = $this->options['width'];
 			$ui->options_width->add_validator( 'validate_heightWidth' );
