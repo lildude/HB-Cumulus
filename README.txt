@@ -1,4 +1,4 @@
-Plugin: HB-Cumulus 1.9
+Plugin: HB-Cumulus 2.0
 URL: http://lildude.co.uk/projects/hb-cumulus
 Plugin Author: Colin Seymour - http://colinseymour.co.uk
 Credit goes to: Roy Tanck for the original WP-Cumulus plugin and Geoff Stearns for
@@ -6,10 +6,14 @@ swfobject as used by Roy's work.
 Licenses:  HB-Cumulus (hb-cumulus.plugin.php) : Apache Software License 2.0
            TagCloud (tagcloud.swf): GNU Public License v3
            swfobject (swfobject.js): MIT License
+		   TagCanvas (tagcanvas.min.js): GNU Lesser General Public License v3
 
-HB-Cumulus is a Flash-based tag cloud for Habari that displays your tag cloud in a rotating sphere.
+HB-Cumulus is a HTML 5 or Flash based tag cloud for Habari that displays your tag cloud in a rotating sphere.
 
-HB-Cumulus is a port of the brilliant WP-Cumulus (http://wordpress.org/extend/plugins/wp-cumulus/) by Roy Tanck (http://www.roytanck.com/).
+HB-Cumulus is a port of the brilliant WP-Cumulus (http://wordpress.org/extend/plugins/wp-cumulus/) by Roy Tanck (http://www.roytanck.com/) 
+with the HTML5 tagcloud functionality added in HB-Cumulus 2.0 by using TagCanvas (http://www.goat1000.com/tagcanvas.php).
+
+The HTML5 tagcloud is the default tagcloud with the Flash version being used as a fallback option.
 
 FUNCTIONALITY
 -------------
@@ -24,6 +28,7 @@ Functionality includes the ability to set...
     * the keywords to exclude
     * the number of keywords to display
     * the minimum and maximum font sizes to use
+	* offer the HTML5 or Flash version by default.  Defaults to HTML5.
 
 ... all within the Habari plugin configuration options. There is even a preview of
 the cloud within the configuration section so you can see your changes taking effect
@@ -118,6 +123,8 @@ There are a couple of things worth noting for reference purposes:
 REVISION HISTORY
 ----------------
 
+2.0 - Added TagCanvas for HTML5 functionality. This is now the default tag cloud.
+	- TODO: Falls back to Flash if not a HTML5 compatible browser
 1.9 - Revert back to using a HB-Cumulus specific tagcloud.swf file as HB-Cumulus
       to resolve the mild HTML Injection vulnerability detailed at http://seclists.org/fulldisclosure/2011/Sep/101
     - Updated help documentation to list all implementation methods
